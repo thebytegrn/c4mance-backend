@@ -1,8 +1,16 @@
 import { USER_ROLES } from "../constants/index.js";
-import { signInValidator, signUpValidator } from "../constants/validators.js";
+import {
+  signInValidator,
+  signUpValidator,
+} from "../constants/validators.constants.js";
 import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import sendEmailQueue from "../queue/sendEmail.queue.js";
+import { verifyEmailTemplate } from "../templates/index.js";
+import { genToken } from "../utils/genToken.utils.js";
+
+import redisClient from "../database/redis.database.js";
 
 export const refreshService = async (req, res) => {
   try {
@@ -69,7 +77,7 @@ export const loginService = async (req, res) => {
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -93,14 +101,37 @@ export const signUpService = async (req, res) => {
         .json({ success: false, message: "Invalid form data" });
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const parsedForm = signUpValidator.parse(req.body);
 
     const newUser = new User({
-      ...req.body,
+      ...parsedForm,
       password: hashedPassword,
       role: USER_ROLES.ADMIN,
     });
 
     await newUser.save();
+
+    const token = genToken();
+    const emailVerificationURL = `${req.protocol}://${req.host}/v1/auth/verify-email/?token=${token}`;
+
+    await redisClient.setex(
+      `emailVerification:${token}`,
+      3600 * 24, // expires in a day
+      JSON.stringify({ userId: newUser._id })
+    );
+
+    sendEmailQueue.add("onboard", {
+      from: "C4mance <noreply@c4mance.com>",
+      to: newUser.email,
+      subject: "Welcome to C4mance!",
+      html: verifyEmailTemplate({
+        name: newUser.firstName.concat(" ", newUser.lastName),
+        email: newUser.email,
+        url: emailVerificationURL,
+        year: new Date().getFullYear(),
+      }),
+    });
+
     return res
       .status(201)
       .json({ success: true, message: "User created successfully" });

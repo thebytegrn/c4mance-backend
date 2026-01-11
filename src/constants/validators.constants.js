@@ -1,4 +1,5 @@
-import z, { toUpperCase } from "zod";
+import z from "zod";
+import { capitalize } from "../utils/capitalize.utils.js";
 
 export const signInValidator = z.object({
   email: z.email(),
@@ -9,11 +10,11 @@ export const signUpValidator = z.object({
   firstName: z
     .string()
     .min(2)
-    .transform((val) => toUpperCase(val)),
+    .transform((val) => capitalize(val)),
   lastName: z
     .string()
     .min(2)
-    .transform((val) => toUpperCase(val)),
+    .transform((val) => capitalize(val)),
   email: z.email(),
   password: z
     .string()
