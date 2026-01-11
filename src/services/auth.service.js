@@ -25,13 +25,17 @@ export const loginService = async (req, res) => {
       return res.status(401).json({ success: false, message: "Login failed" });
     }
 
-    const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "15m",
     });
 
-    const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const refreshToken = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
