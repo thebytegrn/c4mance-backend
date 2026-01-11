@@ -4,6 +4,36 @@ import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+export const refreshService = async (req, res) => {
+  try {
+    const { refreshToken } = req.cookies;
+
+    if (!refreshToken) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+
+    const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.userId);
+
+    if (!user) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+
+    const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Refresh token successful",
+      data: { accessToken },
+    });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export const loginService = async (req, res) => {
   try {
     if (!req.body || !signInValidator.parse(req.body)) {
