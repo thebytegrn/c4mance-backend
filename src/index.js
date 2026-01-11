@@ -1,9 +1,17 @@
 import express from "express";
+import v1Router from "./routes/v1/v1.route.js";
+import { connectDB } from "./database/primary.js";
 
+await connectDB();
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/v1", v1Router);
+
+app.get("/ping", (req, res) => {
+  res.send("pong!");
 });
 
 app.listen(3000, () => {
