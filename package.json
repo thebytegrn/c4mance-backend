@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "NODE_ENV=development dotenv nodemon src/index.js",
-    "start:proxy": "ngrok http 3000"
+    "start:ngrok": "ngrok http 3000"
   },
   "keywords": [],
   "author": "",
@@ -13,7 +13,9 @@
   "type": "module",
   "dependencies": {
     "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
     "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.1.2",
     "nodemon": "^3.1.11",
     "zod": "^4.3.5"

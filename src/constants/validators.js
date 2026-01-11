@@ -1,5 +1,10 @@
 import z, { toUpperCase } from "zod";
 
+export const signInValidator = z.object({
+  email: z.email(),
+  password: z.string(),
+});
+
 export const signUpValidator = z.object({
   firstName: z
     .string()
