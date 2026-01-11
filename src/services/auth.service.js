@@ -93,6 +93,33 @@ export const loginService = async (req, res) => {
   }
 };
 
+export const verifyEmailService = async (req, res) => {
+  try {
+    const token = req.query?.token;
+
+    if (!token) return res.status(400).send("Expired/Invalid session token");
+
+    redisClient.get(`emailVerification:${token}`, async (err, data) => {
+      if (err) {
+        console.log(err);
+        return res.status(400).send("Expired/Invalid session token");
+      }
+
+      if (!data) return res.status(400).send("Expired/Invalid session token");
+
+      const userId = JSON.parse(data).userId;
+
+      await User.findByIdAndUpdate(userId, { emailVerified: true }).exec();
+      await redisClient.del(`emailVerification:${token}`);
+
+      return res.status(200).send("Email verified successfully!");
+    });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export const signUpService = async (req, res) => {
   try {
     if (!req.body || !signUpValidator.parse(req.body))
