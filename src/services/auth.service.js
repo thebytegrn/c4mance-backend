@@ -11,6 +11,7 @@ import { verifyEmailTemplate } from "../templates/index.js";
 import { genToken } from "../utils/genToken.utils.js";
 
 import redisClient from "../database/redis.database.js";
+import { RefreshToken } from "../models/refreshToken.model.js";
 
 export const refreshService = async (req, res) => {
   try {
@@ -27,9 +28,33 @@ export const refreshService = async (req, res) => {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
+    if (user.authTokenVersion !== decoded.version) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+
     const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "15m",
     });
+
+    const newRefreshToken = jwt.sign(
+      { userId: user._id, version: user.authTokenVersion },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
+
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    await RefreshToken.findOneAndUpdate(
+      { userId: user._id },
+      { token: newRefreshToken, tokenVersion: user.authTokenVersion }
+    );
 
     return res.status(200).json({
       success: true,
@@ -68,12 +93,20 @@ export const loginService = async (req, res) => {
     });
 
     const refreshToken = jwt.sign(
-      { userId: user._id },
+      { userId: user._id, version: user.authTokenVersion },
       process.env.JWT_SECRET,
       {
         expiresIn: "7d",
       }
     );
+
+    const saveRefreshToken = new RefreshToken({
+      token: refreshToken,
+      userId: user._id,
+      tokenVersion: user.authTokenVersion,
+    });
+
+    await saveRefreshToken.save();
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,

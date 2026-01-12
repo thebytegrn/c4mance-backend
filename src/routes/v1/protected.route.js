@@ -9,8 +9,8 @@ protectedRouter.post("/", (req, res) => {
   res.send("Protected route");
 });
 
-protectedRouter.post("/account", (req, res) => {
-  res.send("Protected route");
+protectedRouter.post("/org/${org_id}/member/invite", (req, res) => {
+  res.send("user invite");
 });
 
 export default protectedRouter;

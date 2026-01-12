@@ -8,6 +8,7 @@ const schema = new Schema({
   password: { type: String, required: true, minLength: 8 },
   role: { type: String, required: true, enum: Object.values(USER_ROLES) },
   emailVerified: { type: Boolean, default: false },
+  authTokenVersion: { type: Number, default: 0 },
 });
 
 export const User = mongoose.model("User", schema);
