@@ -13,21 +13,24 @@ export const authMiddleware = async (req, res, next) => {
 
       const userId = decoded?.userId;
 
-      if (!userId) throw new Error("Invalid auth token");
+      if (!userId)
+        return res
+          .status(401)
+          .json({ success: false, message: "Unauthorized" });
 
       const user = await User.findById(userId);
 
-      if (!user) throw new Error("Invalid auth token");
+      if (!user)
+        return res
+          .status(401)
+          .json({ success: false, message: "Unauthorized" });
 
       req.authUser = user;
       next();
     } else {
-      throw new Error("Invalid auth token");
+      return res.status(401).json({ success: false, message: "Unauthorized" });
     }
-  } catch (error) {
-    res.status(401).json({
-      success: false,
-      message: error.message,
-    });
+  } catch {
+    return res.status(401).json({ success: false, message: "Unauthorized" });
   }
 };
