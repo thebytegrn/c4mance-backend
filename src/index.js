@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import { RedisStore } from "connect-redis";
 import redisClient from "./database/redis.database.js";
+import { ZodError } from "zod";
 
 const redisStore = new RedisStore({
   client: redisClient,
@@ -39,6 +40,33 @@ app.use("/v1", v1Router);
 
 app.get("/ping", (req, res) => {
   res.send("pong!");
+});
+
+app.use((err, req, res, next) => {
+  if (typeof err === "object") {
+    if (err instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: "Bad input, could not process data",
+        issues: err.issues,
+      });
+    }
+
+    if (
+      err.name === "MongoServerError" &&
+      "code" in err &&
+      err.code === 11000
+    ) {
+      return res.status(422).json({
+        success: false,
+        message: "Duplicate record not allowed",
+      });
+    }
+  }
+  console.log("Internal server error:\n", err);
+  return res
+    .status(500)
+    .json({ success: false, message: "Internal server error" });
 });
 
 app.listen(3000, () => {

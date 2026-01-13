@@ -28,3 +28,9 @@ export const loginValidator = z.object({
   email: z.email(),
   password: z.string(),
 });
+
+export const createOrgValidator = z.object({
+  name: z.string(),
+  email: z.email(),
+  address: z.string(),
+});

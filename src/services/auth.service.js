@@ -183,7 +183,7 @@ export const signUpService = async (req, res) => {
     sendEmailQueue.add("onboard", {
       from: "C4mance <noreply@c4mance.com>",
       to: newUser.email,
-      subject: "Welcome to C4mance!",
+      subject: "Verify your email",
       html: verifyEmailTemplate({
         name: newUser.firstName.concat(" ", newUser.lastName),
         email: newUser.email,
