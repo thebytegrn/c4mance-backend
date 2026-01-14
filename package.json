@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "NODE_ENV=development dotenv nodemon src/index.js",
+    "start:prod": "NODE_ENV=production node src/index.js",
     "start:ngrok": "ngrok http 3000"
   },
   "keywords": [],
