@@ -6,6 +6,7 @@ const redisClient = new Redis({
   username: process.env.REDIS_USERNAME,
   password: process.env.REDIS_PASSWORD,
   maxRetriesPerRequest: null,
+  tls: true,
 });
 
 redisClient.on("connect", () => {
