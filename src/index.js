@@ -4,8 +4,10 @@ import { connectDB } from "./database/primary.database.js";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import { RedisStore } from "connect-redis";
-import redisClient from "./database/redis.database.js";
+import { connectRedis } from "./database/redis.database.js";
 import { ZodError } from "zod";
+
+export const redisClient = await connectRedis();
 
 const redisStore = new RedisStore({
   client: redisClient,

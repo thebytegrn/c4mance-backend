@@ -10,7 +10,7 @@ import sendEmailQueue from "../queue/sendEmail.queue.js";
 import { verifyEmailTemplate } from "../templates/index.js";
 import { genToken } from "../utils/genToken.utils.js";
 
-import redisClient from "../database/redis.database.js";
+import { redisClient } from "../index.js";
 import { RefreshToken } from "../models/refreshToken.model.js";
 
 export const refreshService = async (req, res) => {

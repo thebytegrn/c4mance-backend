@@ -1,15 +1,22 @@
 import { Queue, Worker } from "bullmq";
-import redisConnection from "../database/redis.database.js";
 import { sendEmail } from "../utils/sendEmail.utils.js";
 
-const sendEmailQueue = new Queue("sendEmail");
+import { redisConnectionOption } from "../database/redis.database.js";
+
+const sendEmailQueue = new Queue("sendEmail", {
+  connection: redisConnectionOption,
+  defaultJobOptions: {
+    removeOnComplete: true,
+    removeOnFail: 100,
+  },
+});
 
 export const sendEmailQueueWorker = new Worker(
   "sendEmail",
   async ({ data }) => {
     await sendEmail(data);
   },
-  { connection: redisConnection }
+  { connection: redisConnectionOption }
 );
 
 export default sendEmailQueue;
