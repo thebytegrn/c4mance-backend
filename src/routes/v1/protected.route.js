@@ -2,35 +2,40 @@ import { Router } from "express";
 import { authMiddleware } from "../../middlewares/auth.middleware.js";
 import { createOrgService } from "../../services/createOrg.service.js";
 import { upload } from "../../utils/upload.util.js";
-import mongoose from "mongoose";
 import { Organization } from "../../models/organization.model.js";
+import { inviteUserService } from "../../services/inviteUser.service.js";
+import { userInvitePermissionCheck } from "../../middlewares/userInvitePermissionCheck.middleware.js";
+import { hasOrganization } from "../../middlewares/hasOrganization.middleware.js";
+import { addOrgDepartmentService } from "../../services/addOrgDepartment.service.js";
+import { isAdminUser } from "../../middlewares/isAdminUser.middleware.js";
+import { getUserOrganizations } from "../../services/getUserOrganizations.service.js";
 
 const protectedRouter = Router();
 
 protectedRouter.use(authMiddleware);
 
-protectedRouter.post("/", (req, res) => {
-  res.send("Protected route");
-});
+protectedRouter.post("/org", isAdminUser, createOrgService);
 
-protectedRouter.post("/org", createOrgService);
+protectedRouter.get("/org", isAdminUser, hasOrganization, getUserOrganizations);
 
-protectedRouter.post("/org/${org_id}/member/invite", (req, res) => {
-  res.send("user invite");
-});
+protectedRouter.post(
+  "/org/department",
+  isAdminUser,
+  hasOrganization,
+  addOrgDepartmentService
+);
+
+protectedRouter.post(
+  "/org/member/invite",
+  isAdminUser,
+  userInvitePermissionCheck,
+  inviteUserService
+);
 
 protectedRouter.post(
   "/upload/logo",
-  (req, res, next) => {
-    if (
-      !req.authUser.organizationId ||
-      !mongoose.isValidObjectId(req.authUser.organizationId)
-    )
-      return res
-        .status(422)
-        .json({ success: false, message: "Organization setup required" });
-    next();
-  },
+  isAdminUser,
+  hasOrganization,
   upload.single("logoFile"),
   async (req, res) => {
     try {

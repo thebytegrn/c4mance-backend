@@ -24,11 +24,16 @@ export const refreshService = async (req, res) => {
     const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
     const user = await User.findById(decoded.userId);
 
-    if (!user) {
+    const tokenExist = await RefreshToken.findOne({
+      userId: decoded.userId,
+      token: refreshToken,
+    }).exec();
+
+    if (!user || !tokenExist) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
-    if (user.authTokenVersion !== decoded.version) {
+    if (decoded.version !== user.authTokenVersion) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
@@ -63,7 +68,9 @@ export const refreshService = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    throw error;
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid/Expired token" });
   }
 };
 
