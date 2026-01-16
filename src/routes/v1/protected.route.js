@@ -3,34 +3,14 @@ import { authMiddleware } from "../../middlewares/auth.middleware.js";
 import { createOrgService } from "../../services/createOrg.service.js";
 import { upload } from "../../utils/upload.util.js";
 import { Organization } from "../../models/organization.model.js";
-import { inviteUserService } from "../../services/inviteUser.service.js";
-import { userInvitePermissionCheck } from "../../middlewares/userInvitePermissionCheck.middleware.js";
 import { hasOrganization } from "../../middlewares/hasOrganization.middleware.js";
-import { addOrgDepartmentService } from "../../services/addOrgDepartment.service.js";
 import { isAdminUser } from "../../middlewares/isAdminUser.middleware.js";
-import { getUserOrganizations } from "../../services/getUserOrganizations.service.js";
 
 const protectedRouter = Router();
 
 protectedRouter.use(authMiddleware);
 
 protectedRouter.post("/org", isAdminUser, createOrgService);
-
-protectedRouter.get("/org", isAdminUser, hasOrganization, getUserOrganizations);
-
-protectedRouter.post(
-  "/org/department",
-  isAdminUser,
-  hasOrganization,
-  addOrgDepartmentService
-);
-
-protectedRouter.post(
-  "/org/member/invite",
-  isAdminUser,
-  userInvitePermissionCheck,
-  inviteUserService
-);
 
 protectedRouter.post(
   "/upload/logo",

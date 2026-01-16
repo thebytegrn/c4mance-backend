@@ -1,6 +1,5 @@
 import { Organization } from "../models/organization.model.js";
 import { createOrgValidator } from "../constants/validators.constants.js";
-import { User } from "../models/user.model.js";
 
 export const createOrgService = async (req, res) => {
   try {
@@ -11,6 +10,11 @@ export const createOrgService = async (req, res) => {
 
     const { name, email, address } = createOrgValidator.parse(req.body);
 
+    const existingDefaultOrg = await Organization.findOne({
+      ownerId: req.authUser._id,
+      isDefault: true,
+    }).exec();
+
     const newOrganization = new Organization({
       name,
       email,
@@ -18,11 +22,13 @@ export const createOrgService = async (req, res) => {
       ownerId: req.authUser._id,
     });
 
-    await newOrganization.save();
+    if (existingDefaultOrg) {
+      newOrganization.isDefault = false;
+    }
 
-    await User.findByIdAndUpdate(req.authUser._id, {
-      organizationId: newOrganization._id,
-    });
+    newOrganization.isDefault = true;
+
+    await newOrganization.save();
 
     return res
       .status(201)

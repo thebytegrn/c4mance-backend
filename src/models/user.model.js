@@ -9,7 +9,6 @@ const schema = new Schema({
   role: { type: String, required: true, enum: Object.values(USER_ROLES) },
   emailVerified: { type: Boolean, default: false },
   authTokenVersion: { type: Number, default: 0 },
-  organizationId: { type: Schema.Types.ObjectId, ref: "Organization" },
 });
 
 export const User = mongoose.model("User", schema);

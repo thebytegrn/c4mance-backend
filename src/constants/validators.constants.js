@@ -1,5 +1,6 @@
 import z from "zod";
 import { capitalize } from "../utils/capitalize.utils.js";
+import { DEPARTMENT_ROLES } from "./departmentRoles.constants.js";
 
 export const signInValidator = z.object({
   email: z.email(),
@@ -33,4 +34,11 @@ export const createOrgValidator = z.object({
   name: z.string(),
   email: z.email(),
   address: z.string(),
+});
+
+const departmentRoleSchema = z.enum(DEPARTMENT_ROLES);
+
+export const addOrgDepartmentValidator = z.object({
+  name: z.string(),
+  roles: z.array(departmentRoleSchema),
 });
