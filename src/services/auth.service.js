@@ -145,7 +145,14 @@ export const verifyEmailService = async (req, res) => {
       await User.findByIdAndUpdate(userId, { emailVerified: true }).exec();
       await redisClient.del(`emailVerification:${token}`);
 
-      return res.status(200).send("Email verified successfully!");
+      return res.status(200).send(`
+  <!DOCTYPE html>
+  <html>
+    <body>
+      <p>Email verified successfully. You can now close this tab.</p>
+    </body>
+  </html>
+`);
     });
   } catch (error) {
     console.log(error);
