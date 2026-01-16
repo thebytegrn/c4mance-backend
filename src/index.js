@@ -25,7 +25,7 @@ app.use(
     origin: [
       "https://c4mance.com",
       "https://www.c4mance.com",
-      "localhost:3000",
+      "http://localhost:3000",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     optionsSuccessStatus: 200,
