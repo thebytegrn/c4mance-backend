@@ -132,7 +132,7 @@ export const verifyEmailService = async (req, res) => {
 
     if (!token) return res.status(400).send("Expired/Invalid session token");
 
-    redisClient.get(`emailVerification:${token}`, async (err, data) => {
+    await redisClient.get(`emailVerification:${token}`, async (err, data) => {
       if (err) {
         console.log(err);
         return res.status(400).send("Expired/Invalid session token");
