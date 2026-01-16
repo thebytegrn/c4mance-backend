@@ -174,7 +174,7 @@ export const signUpService = async (req, res) => {
     const token = genToken();
     const emailVerificationURL = `${req.protocol}://${req.host}/v1/auth/verify-email/?token=${token}`;
 
-    await redisClient.setex(
+    await redisClient.setEx(
       `emailVerification:${token}`,
       3600 * 24, // expires in a day
       JSON.stringify({ userId: newUser._id })
