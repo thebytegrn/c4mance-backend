@@ -130,30 +130,28 @@ export const verifyEmailService = async (req, res) => {
   try {
     const token = req.query?.token;
 
-    if (!token) return res.status(400).send("Expired/Invalid session token");
+    if (!token) return res.status(400).send("Invalid or Expired token");
 
-    await redisClient.get(`emailVerification:${token}`, async (err, data) => {
-      if (err) {
-        console.log(err);
-        return res.status(400).send("Expired/Invalid session token");
-      }
+    const verificationToken = await redisClient.get(
+      `emailVerification:${token}`
+    );
 
-      if (!data) return res.status(400).send("Expired/Invalid session token");
+    if (!verificationToken)
+      return res.status(400).send("Invalid or Expired token");
 
-      const userId = JSON.parse(data).userId;
+    const userId = JSON.parse(verificationToken).userId;
 
-      await User.findByIdAndUpdate(userId, { emailVerified: true }).exec();
-      await redisClient.del(`emailVerification:${token}`);
+    await User.findByIdAndUpdate(userId, { emailVerified: true }).exec();
+    await redisClient.del(`emailVerification:${token}`);
 
-      return res.status(200).send(`
-  <!DOCTYPE html>
-  <html>
-    <body>
-      <p>Email verified successfully. You can now close this tab.</p>
-    </body>
-  </html>
+    return res.status(200).send(`
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <p>Email verified successfully. You can now close this tab.</p>
+      </body>
+    </html>
 `);
-    });
   } catch (error) {
     console.log(error);
     throw error;
