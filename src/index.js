@@ -6,6 +6,7 @@ import session from "express-session";
 import { RedisStore } from "connect-redis";
 import { connectRedis } from "./database/redis.database.js";
 import { ZodError } from "zod";
+import cors from "cors";
 
 export const redisClient = await connectRedis();
 
@@ -19,6 +20,17 @@ const app = express();
 
 app.set("trust proxy", true);
 
+app.use(
+  cors({
+    origin: [
+      "https://c4mance.com",
+      "https://www.c4mance.com",
+      "localhost:3000",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    optionsSuccessStatus: 200,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
