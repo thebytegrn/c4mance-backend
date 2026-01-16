@@ -25,7 +25,7 @@ protectedRouter.post(
           .json({ success: false, message: "File not selected" });
 
       const bucket = "https://c4mance.com";
-      await Organization.findByIdAndUpdate(req.authUser.organizationId, {
+      await Organization.findByIdAndUpdate(req.organizationId, {
         $set: { logoURL: bucket + "/" + req.file.key },
       });
 
