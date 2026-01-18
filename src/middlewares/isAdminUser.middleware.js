@@ -1,4 +1,4 @@
-import { USER_ROLES } from "../constants/index.js";
+import { USER_ROLES } from "../constants/userRoles.constant.js";
 
 export const isAdminUser = (req, res, next) => {
   const isAdminUser = req.authUser.role === USER_ROLES.ADMIN;

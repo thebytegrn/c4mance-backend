@@ -7,6 +7,7 @@ import { RedisStore } from "connect-redis";
 import { connectRedis } from "./database/redis.database.js";
 import { ZodError } from "zod";
 import cors from "cors";
+import { MulterError } from "multer";
 
 export const redisClient = await connectRedis();
 
@@ -29,7 +30,7 @@ app.use(
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     optionsSuccessStatus: 200,
-  })
+  }),
 );
 app.use(express.json());
 app.use(cookieParser());
@@ -47,7 +48,7 @@ app.use(
       sameSite: "lax",
       maxAge: 1000 * 60 * 30,
     },
-  })
+  }),
 );
 
 app.use("/v1", v1Router);
@@ -76,6 +77,14 @@ app.use((err, req, res, next) => {
         message: "Duplicate record not allowed",
       });
     }
+
+    if (err instanceof MulterError)
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "Too many files or missing field name",
+        });
   }
   console.log("Internal server error:\n", err);
   return res

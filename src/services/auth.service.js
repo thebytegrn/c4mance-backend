@@ -1,4 +1,3 @@
-import { USER_ROLES } from "../constants/index.js";
 import {
   signInValidator,
   signUpValidator,
@@ -12,6 +11,7 @@ import { genToken } from "../utils/genToken.utils.js";
 
 import { redisClient } from "../index.js";
 import { RefreshToken } from "../models/refreshToken.model.js";
+import { USER_ROLES } from "../constants/userRoles.constant.js";
 
 export const refreshService = async (req, res) => {
   try {
@@ -46,7 +46,7 @@ export const refreshService = async (req, res) => {
       process.env.JWT_SECRET,
       {
         expiresIn: "7d",
-      }
+      },
     );
 
     res.cookie("refreshToken", newRefreshToken, {
@@ -58,7 +58,7 @@ export const refreshService = async (req, res) => {
 
     await RefreshToken.findOneAndUpdate(
       { userId: user._id },
-      { token: newRefreshToken, tokenVersion: user.authTokenVersion }
+      { token: newRefreshToken, tokenVersion: user.authTokenVersion },
     );
 
     return res.status(200).json({
@@ -104,7 +104,7 @@ export const loginService = async (req, res) => {
       process.env.JWT_SECRET,
       {
         expiresIn: "7d",
-      }
+      },
     );
 
     const saveRefreshToken = new RefreshToken({
@@ -140,7 +140,7 @@ export const verifyEmailService = async (req, res) => {
     if (!token) return res.status(400).send("Invalid or Expired token");
 
     const verificationToken = await redisClient.get(
-      `emailVerification:${token}`
+      `emailVerification:${token}`,
     );
 
     if (!verificationToken)
@@ -179,6 +179,7 @@ export const signUpService = async (req, res) => {
       ...parsedForm,
       password: hashedPassword,
       role: USER_ROLES.ADMIN,
+      isRoot: true,
     });
 
     await newUser.save();
@@ -189,7 +190,7 @@ export const signUpService = async (req, res) => {
     await redisClient.setEx(
       `emailVerification:${token}`,
       3600 * 24, // expires in a day
-      JSON.stringify({ userId: newUser._id })
+      JSON.stringify({ userId: newUser._id }),
     );
 
     sendEmailQueue.add("onboard", {

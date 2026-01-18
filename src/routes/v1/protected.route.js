@@ -3,19 +3,21 @@ import { authMiddleware } from "../../middlewares/auth.middleware.js";
 import { createOrgService } from "../../services/createOrg.service.js";
 import { upload } from "../../utils/upload.util.js";
 import { Organization } from "../../models/organization.model.js";
-import { hasOrganization } from "../../middlewares/hasOrganization.middleware.js";
+
 import { isAdminUser } from "../../middlewares/isAdminUser.middleware.js";
+import { isRootUser } from "../../middlewares/isRootUser.middleware.js";
+import { getUserOrgMiddleware } from "../../middlewares/getUserOrg.middleware.js";
 
 const protectedRouter = Router();
 
 protectedRouter.use(authMiddleware);
 
-protectedRouter.post("/org", isAdminUser, createOrgService);
+protectedRouter.post("/org", isRootUser, createOrgService);
 
 protectedRouter.post(
   "/upload/logo",
+  getUserOrgMiddleware,
   isAdminUser,
-  hasOrganization,
   upload.single("logoFile"),
   async (req, res) => {
     try {
@@ -24,10 +26,10 @@ protectedRouter.post(
           .status(400)
           .json({ success: false, message: "File not selected" });
 
-      const bucket = "https://c4mance.com";
+      const bucket = "https://static.c4mance.com";
       await Organization.findByIdAndUpdate(req.organizationId, {
         $set: { logoURL: bucket + "/" + req.file.key },
-      });
+      }).exec();
 
       return res
         .status(200)
@@ -36,7 +38,7 @@ protectedRouter.post(
       console.log(error);
       throw error;
     }
-  }
+  },
 );
 
 export default protectedRouter;

@@ -5,13 +5,13 @@ import { S3 } from "../lib/vendors/s3.js";
 export const upload = multer({
   limits: { fileSize: 1024 * 1024 * 2 },
   fileFilter: (req, file, cb) => {
-    const allowedMimes = ["image/jpeg", "image/png", "image/svg+xml"];
+    const allowedMimes = ["image/jpeg", "image/png"];
     if (allowedMimes.includes(file.mimetype)) {
       cb(null, true);
     } else {
       cb(
-        new Error("Invalid file type. Only JPEG, PNG, and SVG are allowed!"),
-        false
+        new Error("Invalid file type. Only JPEG, and PNG are allowed!"),
+        false,
       );
     }
   },

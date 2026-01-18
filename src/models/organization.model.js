@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const schema = new Schema(
+const OrganizationSchema = new Schema(
   {
     name: { type: String, required: true },
     address: { type: String, required: true },
@@ -9,7 +9,7 @@ const schema = new Schema(
     isDefault: { type: Boolean, required: true },
     ownerId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-export const Organization = mongoose.model("Organization", schema);
+export const Organization = mongoose.model("Organization", OrganizationSchema);

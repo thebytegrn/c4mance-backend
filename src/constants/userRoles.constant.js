@@ -1,0 +1,18 @@
+export const USER_ROLES = {
+  ADMIN: "Admin",
+  EXECUTIVE: "Executive",
+  DIRECTOR: "Director",
+  GENERAL_MANAGER: "General Manager",
+  DEPUTY_GENERAL_MANAGER: "Deputy",
+  SENIOR_MANAGER: "Senior Mananger",
+  MANAGER: "Manager",
+  SUPERVISOR: "Supervisor",
+  LINE_HEAD: "Line Head",
+  TEAM_LEAD: "Team Lead",
+  UNIT_FOCAL: "Unit Focal",
+  SENIOR_ASSOCIATE: "Senior Associate",
+  ASSOCIATE: "Associate",
+  GRADUATE_TRAINEE: "Graduate Trainee",
+  OPERATIONS_STAFF: "Operations Staff",
+  INTERN: "Intern",
+};

@@ -1,6 +1,6 @@
 import z from "zod";
 import { capitalize } from "../utils/capitalize.utils.js";
-import { DEPARTMENT_ROLES } from "./departmentRoles.constants.js";
+import { USER_ROLES } from "./userRoles.constant.js";
 
 export const signInValidator = z.object({
   email: z.email(),
@@ -21,13 +21,8 @@ export const signUpValidator = z.object({
     .string()
     .regex(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character"
+      "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character",
     ),
-});
-
-export const loginValidator = z.object({
-  email: z.email(),
-  password: z.string(),
 });
 
 export const createOrgValidator = z.object({
@@ -36,7 +31,7 @@ export const createOrgValidator = z.object({
   address: z.string(),
 });
 
-const departmentRoleSchema = z.enum(DEPARTMENT_ROLES);
+const departmentRoleSchema = z.enum(USER_ROLES);
 
 export const addOrgDepartmentValidator = z.object({
   name: z.string(),
