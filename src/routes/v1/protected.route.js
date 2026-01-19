@@ -12,7 +12,7 @@ const protectedRouter = Router();
 
 protectedRouter.use(authMiddleware);
 
-protectedRouter.post("/org", isRootUser, createOrgService);
+protectedRouter.post("/orgs", isRootUser, createOrgService);
 
 protectedRouter.post(
   "/upload/logo",
