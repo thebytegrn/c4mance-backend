@@ -62,7 +62,7 @@ app.use((err, req, res, next) => {
     if (err instanceof ZodError) {
       return res.status(400).json({
         success: false,
-        message: "Bad input, could not process data",
+        message: "Bad input, could not process payload",
         issues: err.issues,
       });
     }
@@ -79,12 +79,15 @@ app.use((err, req, res, next) => {
     }
 
     if (err instanceof MulterError)
+      return res.status(400).json({
+        success: false,
+        message: "Too many files or missing field name",
+      });
+
+    if (err instanceof SyntaxError)
       return res
         .status(400)
-        .json({
-          success: false,
-          message: "Too many files or missing field name",
-        });
+        .json({ success: false, message: "Bad or unexpected payload" });
   }
   console.log("Internal server error:\n", err);
   return res

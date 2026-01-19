@@ -1,5 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { USER_ROLES } from "../constants/userRoles.constant.js";
+import { Organization } from "./organization.model.js";
+import { Department } from "./department.model.js";
 
 const UserSchema = new Schema(
   {
@@ -19,5 +21,15 @@ const UserSchema = new Schema(
   },
   { timestamps: true },
 );
+
+UserSchema.methods.getUserOrganizationId = async function () {
+  if (this.isRoot) {
+    const org = await Organization.findOne({ ownerId: this._id }).exec();
+    if (org) return org._id;
+  }
+
+  const dept = await Department.findById(this.departmentId).exec();
+  if (dept) return dept.organizationId;
+};
 
 export const User = mongoose.model("User", UserSchema);

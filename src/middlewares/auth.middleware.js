@@ -19,13 +19,19 @@ export const authMiddleware = async (req, res, next) => {
           .json({ success: false, message: "Unauthorized" });
 
       const user = await User.findById(userId);
+      const authUser = user.toObject();
+      const userOrgId = await user.getUserOrganizationId();
+
+      if (userOrgId) {
+        authUser.organizationId = userOrgId;
+      }
 
       if (!user)
         return res
           .status(401)
           .json({ success: false, message: "Unauthorized" });
 
-      req.authUser = user;
+      req.authUser = authUser;
       next();
     } else {
       return res.status(401).json({ success: false, message: "Unauthorized" });

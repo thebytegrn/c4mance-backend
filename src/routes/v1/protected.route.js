@@ -7,12 +7,15 @@ import { Organization } from "../../models/organization.model.js";
 import { isAdminUser } from "../../middlewares/isAdminUser.middleware.js";
 import { isRootUser } from "../../middlewares/isRootUser.middleware.js";
 import { getUserOrgMiddleware } from "../../middlewares/getUserOrg.middleware.js";
+import { addOrgDepartmentService } from "../../services/addOrgDepartment.service.js";
 
 const protectedRouter = Router();
 
 protectedRouter.use(authMiddleware);
 
 protectedRouter.post("/orgs", isRootUser, createOrgService);
+
+protectedRouter.post("/orgs/departments", isAdminUser, addOrgDepartmentService);
 
 protectedRouter.post(
   "/upload/logo",
