@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>C4mance: Email Verification</title>
+    <title>C4mance: Member Invite</title>
 
     <link
       href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap"
@@ -78,16 +78,10 @@
                 "
               >
                 <p style="margin: 0 0 20px 0">Hi {{name}},</p>
-                <p style="margin: 0 0 30px 0">
-                  Welcome to <strong>C4mance!</strong>
-                </p>
 
                 <p style="margin: 0 0 20px 0">
-                  To complete your registration and activate your account,
-                  please verify your email address.
-                </p>
-                <p style="margin: 0 0 30px 0">
-                  Click the button below to confirm your account:
+                  {{inviteBy}} has invited you to join the team on
+                  <strong>C4mance.</strong>
                 </p>
               </td>
             </tr>
@@ -102,7 +96,7 @@
                 >
                   <tr>
                     <td
-                      align="center"
+                      align="left"
                       bgcolor="#76a62c"
                       style="border-radius: 8px"
                     >
@@ -122,7 +116,7 @@
                           display: inline-block;
                         "
                       >
-                        Verify Account
+                        Accept the invite
                       </a>
                     </td>
                   </tr>
@@ -142,17 +136,8 @@
                   font-family: &quot;Quicksand&quot;, sans-serif;
                 "
               >
-                <p style="margin: 0 0 20px 0">
-                  If you didn’t sign up for this account, please ignore this
-                  email.
-                </p>
-                <p style="margin: 0 0 20px 0">
-                  Thank you for joining C4mance, we’re excited to have you
-                  onboard!
-                </p>
-                <p style="margin: 20px 0 0 0">
-                  Warm regards,<br />The C4mance Team
-                </p>
+                <p style="margin: 0 0 20px 0">Thanks,</p>
+                <p style="margin: 0 0 20px 0">The c4mance team</p>
               </td>
             </tr>
 

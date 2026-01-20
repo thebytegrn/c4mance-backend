@@ -37,3 +37,15 @@ export const addOrgDepartmentValidator = z.object({
   name: z.string(),
   roles: z.array(departmentRoleSchema),
 });
+
+export const orgMemberValidator = z.object({
+  user: signUpValidator.omit({ password: true }).extend({ phone: z.string() }),
+  departmentId: z.string(),
+  departmentRole: z.enum(DEPARTMENT_ROLES),
+  reportingLine: z.string(DEPARTMENT_ROLES),
+  redirectURL: z.url(),
+});
+
+export const memberAcceptInviteValidator = signUpValidator.pick({
+  password: true,
+});

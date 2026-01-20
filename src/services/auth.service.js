@@ -185,7 +185,7 @@ export const signUpService = async (req, res) => {
     await newUser.save();
 
     const token = genToken();
-    const emailVerificationURL = `${req.protocol}://${req.host}/v1/auth/verify-email/?token=${token}`;
+    const emailVerificationURL = `${req.protocol}://${req.host}/v1/auth/verify-email?token=${token}`;
 
     await redisClient.setEx(
       `emailVerification:${token}`,
@@ -193,7 +193,7 @@ export const signUpService = async (req, res) => {
       JSON.stringify({ userId: newUser._id }),
     );
 
-    sendEmailQueue.add("onboard", {
+    await sendEmailQueue.add("onboard", {
       from: "C4mance <noreply@c4mance.com>",
       to: newUser.email,
       subject: "Verify your email",
