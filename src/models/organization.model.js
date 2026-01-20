@@ -8,6 +8,7 @@ const OrganizationSchema = new Schema(
     logoURL: String,
     isDefault: { type: Boolean, required: true },
     ownerId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    nextBillDue: Date,
   },
   { timestamps: true },
 );
