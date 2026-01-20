@@ -11,3 +11,7 @@ export const verifyEmailTemplate = Handlebars.compile(
 export const inviteMemberTemplate = Handlebars.compile(
   await fs.readFile(path.join(templatesDirPath, "inviteMember.html"), "utf8"),
 );
+
+export const welcomeRootUserEmailTemplate = Handlebars.compile(
+  await fs.readFile(path.join(templatesDirPath, "welcomeRoot.html"), "utf8"),
+);

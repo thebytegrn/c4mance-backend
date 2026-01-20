@@ -6,7 +6,10 @@ import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import sendEmailQueue from "../queue/sendEmail.queue.js";
-import { verifyEmailTemplate } from "../templates/index.js";
+import {
+  verifyEmailTemplate,
+  welcomeRootUserEmailTemplate,
+} from "../templates/index.js";
 import { genToken } from "../utils/genToken.utils.js";
 
 import { redisClient } from "../index.js";
@@ -148,8 +151,24 @@ export const verifyEmailService = async (req, res) => {
 
     const userId = JSON.parse(verificationToken).userId;
 
-    await User.findByIdAndUpdate(userId, { emailVerified: true }).exec();
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { emailVerified: true },
+      { new: true },
+    ).exec();
+
     await redisClient.del(`emailVerification:${token}`);
+
+    await sendEmailQueue.add("welcome-root-user", {
+      from: "C4mance <noreply@c4mance.com>",
+      to: user.email,
+      subject: "Welcome to C4mance!",
+      html: welcomeRootUserEmailTemplate({
+        name: user.firstName,
+        email: user.email,
+        year: new Date().getFullYear(),
+      }),
+    });
 
     return res.status(200).send(`
     <!DOCTYPE html>
