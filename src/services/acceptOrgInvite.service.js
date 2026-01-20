@@ -36,6 +36,8 @@ export const acceptOrgInviteService = async (req, res) => {
 
     await newUser.save();
 
+    await redisClient.del(memberInviteKey);
+
     return res
       .status(201)
       .json({ success: true, message: "Member joined successfully" });
