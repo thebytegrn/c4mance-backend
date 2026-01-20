@@ -6,7 +6,7 @@ import { Organization } from "../../models/organization.model.js";
 
 import { isAdminUser } from "../../middlewares/isAdminUser.middleware.js";
 import { isRootUser } from "../../middlewares/isRootUser.middleware.js";
-import { getUserOrgMiddleware } from "../../middlewares/getUserOrg.middleware.js";
+import { hasOrganization } from "../../middlewares/hasOrganization.middleware.js";
 import { addOrgDepartmentService } from "../../services/addOrgDepartment.service.js";
 import { inviteMemberService } from "../../services/inviteMember.service.js";
 import { getOrgDepartmentsService } from "../../services/getOrgDepartments.service.js";
@@ -30,7 +30,7 @@ protectedRouter.get(
 
 protectedRouter.post(
   "/upload/logo",
-  getUserOrgMiddleware,
+  hasOrganization,
   isAdminUser,
   upload.single("logoFile"),
   async (req, res) => {
@@ -41,7 +41,7 @@ protectedRouter.post(
           .json({ success: false, message: "File not selected" });
 
       const bucket = "https://static.c4mance.com";
-      await Organization.findByIdAndUpdate(req.organizationId, {
+      await Organization.findByIdAndUpdate(req.authUser.organizationId, {
         $set: { logoURL: bucket + "/" + req.file.key },
       }).exec();
 
