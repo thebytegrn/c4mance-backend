@@ -172,12 +172,10 @@ export const signUpService = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Invalid form data" });
 
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const parsedForm = signUpValidator.parse(req.body);
 
     const newUser = new User({
       ...parsedForm,
-      password: hashedPassword,
       role: USER_ROLES.ADMIN,
       isRoot: true,
     });
