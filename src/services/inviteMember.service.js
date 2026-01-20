@@ -12,7 +12,6 @@ export const inviteMemberService = async (req, res) => {
     const body = orgMemberValidator.parse(req.body);
 
     const inviteToken = genToken();
-    console.log(inviteToken);
 
     const memberInviteKey = `orgMemberInvite:${inviteToken}`;
 

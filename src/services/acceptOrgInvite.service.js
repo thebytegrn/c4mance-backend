@@ -16,7 +16,6 @@ export const acceptOrgInviteService = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Invite expired, contact admin" });
 
-    console.log(req.body);
     const { password: userPassword } = memberAcceptInviteValidator.parse(
       req.body,
     );
@@ -36,7 +35,6 @@ export const acceptOrgInviteService = async (req, res) => {
     });
 
     await newUser.save();
-    console.log(newUser);
 
     return res
       .status(201)
