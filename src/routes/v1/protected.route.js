@@ -9,6 +9,7 @@ import { isRootUser } from "../../middlewares/isRootUser.middleware.js";
 import { getUserOrgMiddleware } from "../../middlewares/getUserOrg.middleware.js";
 import { addOrgDepartmentService } from "../../services/addOrgDepartment.service.js";
 import { inviteMemberService } from "../../services/inviteMember.service.js";
+import { getOrgDepartmentsService } from "../../services/getOrgDepartments.service.js";
 
 const protectedRouter = Router();
 
@@ -19,6 +20,8 @@ protectedRouter.post("/orgs", isRootUser, createOrgService);
 protectedRouter.post("/orgs/departments", isAdminUser, addOrgDepartmentService);
 
 protectedRouter.post("/orgs/member/invite", inviteMemberService);
+
+protectedRouter.get("/orgs/departments", getOrgDepartmentsService);
 
 protectedRouter.post(
   "/upload/logo",
