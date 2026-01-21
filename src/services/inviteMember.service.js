@@ -22,7 +22,7 @@ export const inviteMemberService = async (req, res) => {
     if (exisitingInvite || existingUser)
       return res
         .status(409)
-        .json({ success: false, message: "Unable to invite user" });
+        .json({ success: false, message: "Conflicting record, invite failed" });
 
     const departmentId =
       mongoose.isValidObjectId(body.departmentId) && body.departmentId;
