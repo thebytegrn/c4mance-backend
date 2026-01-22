@@ -34,7 +34,7 @@ protectedRouter.get(
   "/orgs/reportlineup/:assignedDepartmentalRole",
   getReportLineUpService,
 );
-protectedRouter.get("orgs/departments/roles", getDepartmentRoles);
+protectedRouter.get("/orgs/departments/roles", getDepartmentRoles);
 
 protectedRouter.post(
   "/upload/logo",
