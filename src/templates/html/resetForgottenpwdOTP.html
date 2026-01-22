@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>C4mance: reset forgot password</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style type="text/css">
+      /* Force Quicksand for clients that support web fonts */
+      @media screen {
+        .quicksand-font {
+          font-family:
+            "Quicksand", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+        }
+      }
+
+      /* Fix for Outlook.com/Windows to prevent it defaulting to Times New Roman */
+      [style*="Quicksand"] {
+        font-family:
+          "Quicksand", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+      }
+    </style>
+  </head>
+  <body
+    class="quicksand-font"
+    style="
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+      font-family:
+        &quot;Quicksand&quot;, &quot;Helvetica Neue&quot;, Helvetica, Arial,
+        sans-serif;
+      -webkit-font-smoothing: antialiased;
+    "
+  >
+    <table
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
+      width="100%"
+      style="table-layout: fixed"
+    >
+      <tr>
+        <td align="center" style="padding: 40px 20px">
+          <table
+            border="0"
+            cellpadding="0"
+            cellspacing="0"
+            width="100%"
+            style="max-width: 600px"
+          >
+            <tr>
+              <td align="left" style="padding-bottom: 40px">
+                <img
+                  src="https://pubassets.c4mance.com/logos/c4mance-verify_email.png"
+                  alt="C4mance logo"
+                  width="48"
+                  height="40"
+                  style="display: block; border: 0"
+                />
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                align="left"
+                class="quicksand-font"
+                style="
+                  font-size: 16px;
+                  line-height: 1.6;
+                  color: #344054;
+                  font-family: &quot;Quicksand&quot;, sans-serif;
+                "
+              >
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                  <tr>
+                    <td align="center" style="padding: 20px 0">
+                      <table
+                        border="0"
+                        cellpadding="0"
+                        cellspacing="0"
+                        width="600"
+                        style="max-width: 600px; width: 100%"
+                      >
+                        <tr>
+                          <td
+                            style="
+                              font-size: 16px;
+                              line-height: 1.6;
+                              color: #344054;
+                              font-family: &quot;Quicksand&quot;, sans-serif;
+                            "
+                          >
+                            <p>Hi {{firstName}},</p>
+                            <p>This is your verification code:</p>
+
+                            <table
+                              border="0"
+                              cellpadding="0"
+                              cellspacing="0"
+                              align="left"
+                            >
+                              <tr>
+                                {{#each codeDigits}}
+                                <td
+                                  width="50"
+                                  height="60"
+                                  style="
+                                    border: 1px solid #76a72d;
+                                    border-radius: 8px;
+                                    text-align: center;
+                                    font-size: 32px;
+                                    font-weight: bold;
+                                    color: #76a72d;
+                                    background-color: #ffffff;
+                                  "
+                                >
+                                  {{this}}
+                                </td>
+                                <td width="10">&nbsp;</td>
+                                {{/each}}
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+
+                <p style="margin: 0 0 30px 0">
+                  This code will only be valid for the next 5 minutes. If the
+                  code does not work, it may have expired, Please try sending
+                  another link.
+                </p>
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                align="left"
+                class="quicksand-font"
+                style="
+                  font-size: 16px;
+                  line-height: 1.6;
+                  color: #344054;
+                  padding-bottom: 60px;
+                  font-family: &quot;Quicksand&quot;, sans-serif;
+                "
+              >
+                <p style="margin: 20px 0 0 0">Thanks,<br />The C4mance Team</p>
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                align="left"
+                class="quicksand-font"
+                style="
+                  font-size: 14px;
+                  line-height: 1.5;
+                  color: #717680;
+                  font-family: &quot;Quicksand&quot;, sans-serif;
+                "
+              >
+                <p style="margin: 0 0 20px 0">
+                  This email was sent to
+                  <span style="color: #76a62c">{{email}}</span>. If you'd rather
+                  not receive this kind of email, you can
+                  <span style="color: #76a62c; text-decoration: underline"
+                    >unsubscribe</span
+                  >
+                  or
+                  <span style="color: #76a62c; text-decoration: underline"
+                    >manage your email preferences</span
+                  >.
+                </p>
+                <p style="margin: 0 0 40px 0">
+                  &copy; {{year}} Eisoft Limited, 78, Bode Thomas Street,
+                  Surulere, Lagos State, Nigeria.
+                </p>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                  <tr>
+                    <td align="left" width="50%">
+                      <img
+                        src="https://pubassets.c4mance.com/logos/c4mance-verify_email.png"
+                        alt="C4mance logo"
+                        width="48"
+                        height="40"
+                        style="display: block; border: 0"
+                      />
+                    </td>
+                    <td align="right" width="50%">
+                      <table border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td style="padding-left: 15px">
+                            <a href="#"
+                              ><img
+                                src="https://cdn-icons-png.flaticon.com/512/733/733579.png"
+                                alt="Twitter"
+                                width="20"
+                                height="20"
+                                style="
+                                  display: block;
+                                  border: 0;
+                                  filter: grayscale(100%);
+                                  opacity: 0.5;
+                                "
+                            /></a>
+                          </td>
+                          <td style="padding-left: 15px">
+                            <a href="#"
+                              ><img
+                                src="https://cdn-icons-png.flaticon.com/512/174/174848.png"
+                                alt="Facebook"
+                                width="20"
+                                height="20"
+                                style="
+                                  display: block;
+                                  border: 0;
+                                  filter: grayscale(100%);
+                                  opacity: 0.5;
+                                "
+                            /></a>
+                          </td>
+                          <td style="padding-left: 15px">
+                            <a href="#"
+                              ><img
+                                src="https://cdn-icons-png.flaticon.com/512/174/174855.png"
+                                alt="Instagram"
+                                width="20"
+                                height="20"
+                                style="
+                                  display: block;
+                                  border: 0;
+                                  filter: grayscale(100%);
+                                  opacity: 0.5;
+                                "
+                            /></a>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -15,3 +15,10 @@ export const inviteMemberTemplate = Handlebars.compile(
 export const welcomeRootUserEmailTemplate = Handlebars.compile(
   await fs.readFile(path.join(templatesDirPath, "welcomeRoot.html"), "utf8"),
 );
+
+export const resetForgottenpwdOTPTemp = Handlebars.compile(
+  await fs.readFile(
+    path.join(templatesDirPath, "resetForgottenpwdOTP.html"),
+    "utf8",
+  ),
+);
