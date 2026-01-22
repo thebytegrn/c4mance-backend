@@ -35,7 +35,6 @@ protectedRouter.get(
   getReportLineUpService,
 );
 protectedRouter.get("/orgs/departments/roles", getDepartmentRoles);
-
 protectedRouter.post(
   "/upload/logo",
   hasOrganization,
