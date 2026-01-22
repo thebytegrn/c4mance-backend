@@ -10,7 +10,9 @@ export const getOrgDepartmentMembers = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Invalid department ID" });
 
-    const members = await User.find({ departmentId }).exec();
+    const members = await User.find({ departmentId })
+      .select("-password")
+      .exec();
 
     if (!members.length)
       return res.status(404).json({
