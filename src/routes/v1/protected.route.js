@@ -11,6 +11,7 @@ import { addOrgDepartmentService } from "../../services/addOrgDepartment.service
 import { inviteMemberService } from "../../services/inviteMember.service.js";
 import { getOrgDepartmentsService } from "../../services/getOrgDepartments.service.js";
 import { getReportLineUpService } from "../../services/getReportLineUp.service.js";
+import { getOrgDepartmentMembers } from "../../services/getOrgDepartmentMembers.service.js";
 
 const protectedRouter = Router();
 
@@ -23,6 +24,11 @@ protectedRouter.post("/orgs/departments", isAdminUser, addOrgDepartmentService);
 protectedRouter.post("/orgs/member/invite", inviteMemberService);
 
 protectedRouter.get("/orgs/departments", getOrgDepartmentsService);
+protectedRouter.get(
+  "/orgs/departments/:departmentId/members",
+  getOrgDepartmentMembers,
+);
+
 protectedRouter.get(
   "/orgs/reportlineup/:assignedDepartmentalRole",
   getReportLineUpService,
