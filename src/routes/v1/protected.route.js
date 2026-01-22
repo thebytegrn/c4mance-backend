@@ -12,6 +12,7 @@ import { inviteMemberService } from "../../services/inviteMember.service.js";
 import { getOrgDepartmentsService } from "../../services/getOrgDepartments.service.js";
 import { getReportLineUpService } from "../../services/getReportLineUp.service.js";
 import { getOrgDepartmentMembers } from "../../services/getOrgDepartmentMembers.service.js";
+import { getDepartmentRoles } from "../../services/getDepartmentRoles.service.js";
 
 const protectedRouter = Router();
 
@@ -33,6 +34,7 @@ protectedRouter.get(
   "/orgs/reportlineup/:assignedDepartmentalRole",
   getReportLineUpService,
 );
+protectedRouter.get("orgs/departments/roles", getDepartmentRoles);
 
 protectedRouter.post(
   "/upload/logo",
