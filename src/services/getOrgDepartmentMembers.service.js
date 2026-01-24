@@ -4,7 +4,7 @@ import { User } from "../models/user.model.js";
 export const getOrgDepartmentMembers = async (req, res) => {
   try {
     const { cursor } = req.query;
-    const limit = req.query?.limit || 10;
+    const limit = Number(req.query.limit) || 10;
 
     const departmentId = req.params?.departmentId;
 
