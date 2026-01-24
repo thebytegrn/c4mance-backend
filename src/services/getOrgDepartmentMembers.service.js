@@ -15,9 +15,10 @@ export const getOrgDepartmentMembers = async (req, res) => {
       .exec();
 
     if (!members.length)
-      return res.status(404).json({
-        success: false,
-        message: "Members with department ID not found",
+      res.status(200).json({
+        success: true,
+        messsage: "Department members",
+        data: { totalCount: 0, members },
       });
 
     res.status(200).json({
