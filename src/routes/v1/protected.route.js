@@ -19,6 +19,7 @@ import { getPaginatedOrgMembers } from "../../services/getPaginatedOrgMembers.se
 import { searchOrgDepartments } from "../../services/searchOrgDepartments.service.js";
 import { transferOrgMember } from "../../services/transferOrgMember.service.js";
 import { editDepartment } from "../../services/editDepartment.service.js";
+import { disableOrgDepartment } from "../../services/disableOrgDepartment.service.js";
 
 const protectedRouter = Router();
 
@@ -32,6 +33,7 @@ protectedRouter.get(
   "/orgs/reportlineup/:assignedDepartmentalRole",
   getReportLineUpService,
 );
+protectedRouter.get("/orgs/members/:memberId/transfer", transferOrgMember);
 
 protectedRouter.get("/orgs/departments/search", searchOrgDepartments);
 protectedRouter.post("/orgs/departments", isAdminUser, addOrgDepartmentService);
@@ -47,8 +49,10 @@ protectedRouter.get(
   getOrgDepartmentMembers,
 );
 protectedRouter.get("/orgs/departments/roles", getDepartmentRoles);
-
-protectedRouter.get("/orgs/members/:memberId/transfer", transferOrgMember);
+protectedRouter.post(
+  "/orgs/departments/:departmentId/disable",
+  disableOrgDepartment,
+);
 
 protectedRouter.post(
   "/upload/logo",

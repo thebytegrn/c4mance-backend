@@ -57,3 +57,7 @@ export const editOrgDepartmentValidator = z.object({
     .min(1, "Select at least one role")
     .optional(),
 });
+
+export const DisabledValidator = z.object({
+  reason: z.string(),
+});

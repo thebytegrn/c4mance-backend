@@ -15,6 +15,7 @@ import { genToken } from "../utils/genToken.utils.js";
 import { redisClient } from "../index.js";
 import { RefreshToken } from "../models/refreshToken.model.js";
 import { USER_ROLES } from "../constants/userRoles.constant.js";
+import { Disabled } from "../models/disabled.model.js";
 
 export const refreshService = async (req, res) => {
   try {
@@ -90,6 +91,24 @@ export const loginService = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ success: false, message: "Login failed" });
+    }
+
+    const userIsDisabled = await Disabled.findOne({
+      entityId: user._id,
+    })
+      .lean()
+      .exec();
+    const userDeptIsDisabled = await Disabled.findOne({
+      entityId: user.departmentId,
+    })
+      .lean()
+      .exec();
+
+    if (!user.isRoot && (userIsDisabled || userDeptIsDisabled)) {
+      return res.status(401).json({
+        success: false,
+        message: "Your account or department is disabled",
+      });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
