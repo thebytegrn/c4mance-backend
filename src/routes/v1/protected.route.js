@@ -16,31 +16,31 @@ import { getDepartmentRoles } from "../../services/getDepartmentRoles.service.js
 import { getOrgDepartment } from "../../services/getOrgDepartment.service.js";
 import { searchOrgEmployees } from "../../services/searchOrgEmployees.service.js";
 import { getPaginatedOrgMembers } from "../../services/getPaginatedOrgMembers.service.js";
+import { searchOrgDepartments } from "../../services/searchOrgDepartments.service.js";
 
 const protectedRouter = Router();
 
 protectedRouter.use(authMiddleware);
 
 protectedRouter.post("/orgs", isRootUser, createOrgService);
-
-protectedRouter.post("/orgs/departments", isAdminUser, addOrgDepartmentService);
-
+protectedRouter.get("/orgs/members/search", searchOrgEmployees);
 protectedRouter.post("/orgs/member/invite", inviteMemberService);
-
-protectedRouter.get("/orgs/departments", getOrgDepartmentsService);
-protectedRouter.get("/orgs/departments/:departmentId", getOrgDepartment);
-protectedRouter.get(
-  "/orgs/departments/:departmentId/members",
-  getOrgDepartmentMembers,
-);
-
+protectedRouter.get("/orgs/members", getPaginatedOrgMembers);
 protectedRouter.get(
   "/orgs/reportlineup/:assignedDepartmentalRole",
   getReportLineUpService,
 );
+
+protectedRouter.get("/orgs/departments/search", searchOrgDepartments);
+protectedRouter.post("/orgs/departments", isAdminUser, addOrgDepartmentService);
+protectedRouter.get("/orgs/departments/:departmentId", getOrgDepartment);
+protectedRouter.get("/orgs/departments", getOrgDepartmentsService);
+protectedRouter.get(
+  "/orgs/departments/:departmentId/members",
+  getOrgDepartmentMembers,
+);
 protectedRouter.get("/orgs/departments/roles", getDepartmentRoles);
-protectedRouter.get("/orgs/members/search", searchOrgEmployees);
-protectedRouter.get("/orgs/members", getPaginatedOrgMembers);
+
 protectedRouter.post(
   "/upload/logo",
   hasOrganization,
