@@ -17,6 +17,7 @@ import { getOrgDepartment } from "../../services/getOrgDepartment.service.js";
 import { searchOrgEmployees } from "../../services/searchOrgEmployees.service.js";
 import { getPaginatedOrgMembers } from "../../services/getPaginatedOrgMembers.service.js";
 import { searchOrgDepartments } from "../../services/searchOrgDepartments.service.js";
+import { transferOrgMember } from "../../services/transferOrgMember.service.js";
 
 const protectedRouter = Router();
 
@@ -40,6 +41,8 @@ protectedRouter.get(
   getOrgDepartmentMembers,
 );
 protectedRouter.get("/orgs/departments/roles", getDepartmentRoles);
+
+protectedRouter.get("/orgs/members/:memberId/transfer", transferOrgMember);
 
 protectedRouter.post(
   "/upload/logo",
