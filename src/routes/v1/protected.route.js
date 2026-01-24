@@ -37,7 +37,11 @@ protectedRouter.get("/orgs/departments/search", searchOrgDepartments);
 protectedRouter.post("/orgs/departments", isAdminUser, addOrgDepartmentService);
 protectedRouter.get("/orgs/departments/:departmentId", getOrgDepartment);
 protectedRouter.get("/orgs/departments", getOrgDepartmentsService);
-protectedRouter.post("/orgs/departments/:departmentId", editDepartment);
+protectedRouter.post(
+  "/orgs/departments/:departmentId",
+  isAdminUser,
+  editDepartment,
+);
 protectedRouter.get(
   "/orgs/departments/:departmentId/members",
   getOrgDepartmentMembers,
