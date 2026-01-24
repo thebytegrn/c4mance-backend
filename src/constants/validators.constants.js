@@ -49,3 +49,11 @@ export const orgMemberValidator = z.object({
 export const memberAcceptInviteValidator = signUpValidator.pick({
   password: true,
 });
+
+export const editOrgDepartmentValidator = z.object({
+  name: z.string().min(2).optional(),
+  roles: z
+    .array(z.enum(Object.values(DEPARTMENT_ROLES)))
+    .min(1, "Select at least one role")
+    .optional(),
+});

@@ -18,6 +18,7 @@ import { searchOrgEmployees } from "../../services/searchOrgEmployees.service.js
 import { getPaginatedOrgMembers } from "../../services/getPaginatedOrgMembers.service.js";
 import { searchOrgDepartments } from "../../services/searchOrgDepartments.service.js";
 import { transferOrgMember } from "../../services/transferOrgMember.service.js";
+import { editDepartment } from "../../services/editDepartment.service.js";
 
 const protectedRouter = Router();
 
@@ -36,6 +37,7 @@ protectedRouter.get("/orgs/departments/search", searchOrgDepartments);
 protectedRouter.post("/orgs/departments", isAdminUser, addOrgDepartmentService);
 protectedRouter.get("/orgs/departments/:departmentId", getOrgDepartment);
 protectedRouter.get("/orgs/departments", getOrgDepartmentsService);
+protectedRouter.post("/orgs/departments/:departmentId", editDepartment);
 protectedRouter.get(
   "/orgs/departments/:departmentId/members",
   getOrgDepartmentMembers,
