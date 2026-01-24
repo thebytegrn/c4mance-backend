@@ -14,6 +14,7 @@ import { getReportLineUpService } from "../../services/getReportLineUp.service.j
 import { getOrgDepartmentMembers } from "../../services/getOrgDepartmentMembers.service.js";
 import { getDepartmentRoles } from "../../services/getDepartmentRoles.service.js";
 import { getOrgDepartment } from "../../services/getOrgDepartment.service.js";
+import { searchOrgEmployees } from "../../services/searchOrgEmployees.service.js";
 
 const protectedRouter = Router();
 
@@ -37,6 +38,7 @@ protectedRouter.get(
   getReportLineUpService,
 );
 protectedRouter.get("/orgs/departments/roles", getDepartmentRoles);
+protectedRouter.get("/orgs/members/search", searchOrgEmployees);
 protectedRouter.post(
   "/upload/logo",
   hasOrganization,

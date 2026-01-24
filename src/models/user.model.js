@@ -7,8 +7,8 @@ import bcrypt from "bcryptjs";
 
 const UserSchema = new Schema(
   {
-    firstName: { type: String, required: true, minLength: 2 },
-    lastName: { type: String, required: true, minLength: 2 },
+    firstName: { type: String, required: true, minLength: 2, index: true },
+    lastName: { type: String, required: true, minLength: 2, index: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, minLength: 8 },
     isRoot: { type: Boolean, default: false },
@@ -19,7 +19,11 @@ const UserSchema = new Schema(
       default: USER_ROLES.USER,
       enum: Object.values(USER_ROLES),
     },
-    departmentId: { type: mongoose.Types.ObjectId, ref: "Department" },
+    departmentId: {
+      type: mongoose.Types.ObjectId,
+      ref: "Department",
+      index: true,
+    },
     departmentRole: { type: String, enum: Object.values(DEPARTMENT_ROLES) },
     emailVerified: { type: Boolean, default: false },
     authTokenVersion: { type: Number, default: 0 },
