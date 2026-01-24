@@ -1,12 +1,40 @@
+import mongoose from "mongoose";
 import { Department } from "../models/department.model.js";
 
 export const getOrgDepartmentsService = async (req, res) => {
   try {
-    const departments = await Department.aggregate([
+    const { cursor } = req.query;
+    const limit = 10;
+    const orgId = req.authUser.organizationId;
+
+    if (cursor && !mongoose.isValidObjectId(cursor)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid cursor" });
+    }
+
+    const pipeline = [
       {
         $match: {
-          organizationId: req.authUser.organizationId,
+          organizationId: orgId,
         },
+      },
+    ];
+
+    if (cursor) {
+      pipeline.push({
+        $match: {
+          _id: { $gt: new mongoose.Types.ObjectId(cursor) },
+        },
+      });
+    }
+
+    pipeline.push(
+      {
+        $sort: { _id: 1 },
+      },
+      {
+        $limit: limit,
       },
       {
         $lookup: {
@@ -27,12 +55,19 @@ export const getOrgDepartmentsService = async (req, res) => {
           members: 0,
         },
       },
-    ]);
+    );
+    const departments = await Department.aggregate(pipeline);
+
+    let nextCursor = null;
+
+    if (departments.length === limit) {
+      nextCursor = departments[departments.length - 1]._id;
+    }
 
     return res.status(200).json({
       success: true,
       message: "All organization departments",
-      data: { departments },
+      data: { departments, nextCursor },
     });
   } catch (error) {
     console.log(error);
