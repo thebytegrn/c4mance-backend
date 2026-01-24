@@ -4,7 +4,7 @@ import { Department } from "../models/department.model.js";
 export const getOrgDepartmentsService = async (req, res) => {
   try {
     const { cursor } = req.query;
-    const limit = 10;
+    const limit = Number(req.query.limit) || 10;
     const orgId = req.authUser.organizationId;
 
     if (cursor && !mongoose.isValidObjectId(cursor)) {
