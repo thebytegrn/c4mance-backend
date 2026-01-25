@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-import { DisabledEntities } from "../constants/disabledEntities.constant.js";
+import { Entities } from "../constants/entities.constant.js";
 
 const DisabledSchema = new mongoose.Schema(
   {
     entityId: { type: mongoose.Types.ObjectId, required: true, index: true },
-    entity: { type: String, enum: DisabledEntities, required: true },
+    entity: { type: String, enum: Entities, required: true },
     reason: { type: String, required: true },
     createdAt: { type: Date, default: Date.now() },
   },

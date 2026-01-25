@@ -20,6 +20,7 @@ import { searchOrgDepartments } from "../../services/searchOrgDepartments.servic
 import { transferOrgMember } from "../../services/transferOrgMember.service.js";
 import { editDepartment } from "../../services/editDepartment.service.js";
 import { disableOrgDepartment } from "../../services/disableOrgDepartment.service.js";
+import { deleteOrgDepartment } from "../../services/deleteOrgDepartment.service.js";
 
 const protectedRouter = Router();
 
@@ -53,6 +54,7 @@ protectedRouter.post(
   "/orgs/departments/:departmentId/disable",
   disableOrgDepartment,
 );
+protectedRouter.delete("/orgs/departments/:departmentId", deleteOrgDepartment);
 
 protectedRouter.post(
   "/upload/logo",

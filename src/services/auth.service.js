@@ -16,6 +16,7 @@ import { redisClient } from "../index.js";
 import { RefreshToken } from "../models/refreshToken.model.js";
 import { USER_ROLES } from "../constants/userRoles.constant.js";
 import { Disabled } from "../models/disabled.model.js";
+import { Deleted } from "../models/deleted.model.js";
 
 export const refreshService = async (req, res) => {
   try {
@@ -80,17 +81,26 @@ export const refreshService = async (req, res) => {
 
 export const loginService = async (req, res) => {
   try {
-    if (!req.body || !signInValidator.parse(req.body)) {
+    const { email, password } = signInValidator.parse(req.body);
+
+    const user = await User.findOne({ email }).exec();
+    if (!user) {
       return res
-        .status(400)
-        .json({ success: false, message: "Invalid form data" });
+        .status(401)
+        .json({ success: false, message: "Email or password is incorrect" });
     }
 
-    const { email, password } = req.body;
+    const userDeptIsDeleted = await Deleted.findOne({
+      entityId: user.departmentId,
+    })
+      .lean()
+      .exec();
 
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ success: false, message: "Login failed" });
+    if (userDeptIsDeleted) {
+      return res.status(401).json({
+        success: false,
+        message: "Your assigned department no longer exist",
+      });
     }
 
     const userIsDisabled = await Disabled.findOne({
@@ -114,7 +124,9 @@ export const loginService = async (req, res) => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ success: false, message: "Login failed" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Email or password is incorrect" });
     }
 
     const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
