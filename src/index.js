@@ -95,6 +95,8 @@ app.use((err, req, res, next) => {
     .json({ success: false, message: "Internal server error" });
 });
 
+console.log("NODE Environmet: ", app.get("env"));
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log("Server is running on port 3000");
