@@ -29,6 +29,7 @@ app.use(
       "http://localhost:3000",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true,
     optionsSuccessStatus: 200,
   }),
 );
@@ -94,8 +95,6 @@ app.use((err, req, res, next) => {
     .status(500)
     .json({ success: false, message: "Internal server error" });
 });
-
-console.log("NODE Environmet: ", app.get("env"));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
