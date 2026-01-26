@@ -8,7 +8,6 @@ import { connectRedis } from "./database/redis.database.js";
 import { ZodError } from "zod";
 import cors from "cors";
 import { MulterError } from "multer";
-import { User } from "./models/user.model.js";
 
 export const redisClient = await connectRedis();
 
@@ -19,8 +18,6 @@ const redisStore = new RedisStore({
 
 await connectDB();
 const app = express();
-
-await User.updateMany({ avatarURL: { $exists: false } }).exec();
 
 app.set("trust proxy", true);
 
