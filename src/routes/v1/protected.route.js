@@ -22,6 +22,7 @@ import { editDepartment } from "../../services/editDepartment.service.js";
 import { disableOrgDepartment } from "../../services/disableOrgDepartment.service.js";
 import { deleteOrgDepartment } from "../../services/deleteOrgDepartment.service.js";
 import { editOrgMemberProfile } from "../../services/editOrgMemberProfile.service.js";
+import { changeOrgMemberPassword } from "../../services/changeOrgMemberPassword.service.js";
 
 const protectedRouter = Router();
 
@@ -37,16 +38,18 @@ protectedRouter.get(
 );
 protectedRouter.get("/orgs/members/:memberId/transfer", transferOrgMember);
 protectedRouter.patch("/orgs/members", editOrgMemberProfile);
+protectedRouter.patch("/orgs/members/change-password", changeOrgMemberPassword);
 
-protectedRouter.get("/orgs/departments/search", searchOrgDepartments);
-protectedRouter.post("/orgs/departments", isAdminUser, addOrgDepartmentService);
-protectedRouter.get("/orgs/departments/:departmentId", getOrgDepartment);
-protectedRouter.get("/orgs/departments", getOrgDepartmentsService);
 protectedRouter.post(
   "/orgs/departments/:departmentId",
   isAdminUser,
   editDepartment,
 );
+protectedRouter.get("/orgs/departments/search", searchOrgDepartments);
+protectedRouter.post("/orgs/departments", isAdminUser, addOrgDepartmentService);
+protectedRouter.get("/orgs/departments/:departmentId", getOrgDepartment);
+protectedRouter.get("/orgs/departments", getOrgDepartmentsService);
+
 protectedRouter.get(
   "/orgs/departments/:departmentId/members",
   getOrgDepartmentMembers,
