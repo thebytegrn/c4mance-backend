@@ -2,6 +2,9 @@ import z from "zod";
 import { capitalize } from "../utils/capitalize.utils.js";
 import { DEPARTMENT_ROLES } from "./departmentRoles.constant.js";
 
+export const PASSWORD_REGEX =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
 export const signInValidator = z.object({
   email: z.email(),
   password: z.string(),
@@ -20,7 +23,7 @@ export const signUpValidator = z.object({
   password: z
     .string()
     .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      PASSWORD_REGEX,
       "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character",
     ),
 });
@@ -64,4 +67,9 @@ export const editOrgDepartmentValidator = z.object({
 
 export const DisabledValidator = z.object({
   reason: z.string(),
+});
+
+export const changeOrgMemberPasswordValidator = z.object({
+  currentPassword: z.string(),
+  newPassword: z.string().regex(PASSWORD_REGEX),
 });
