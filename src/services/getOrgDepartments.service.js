@@ -45,14 +45,24 @@ export const getOrgDepartmentsService = async (req, res) => {
         },
       },
       {
+        $lookup: {
+          from: "disabled",
+          localField: "_id",
+          foreignField: "entityId",
+          as: "disabledDoc",
+        },
+      },
+      {
         $addFields: {
           membersCount: { $size: "$members" },
           roleCount: { $size: "$roles" },
+          isDisabled: { $gt: [{ $size: "$disabledDoc" }, 0] },
         },
       },
       {
         $project: {
           members: 0,
+          disabledDoc: 0,
         },
       },
     );
