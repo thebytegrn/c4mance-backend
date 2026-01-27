@@ -54,15 +54,8 @@ export const memberAcceptInviteValidator = signUpValidator.pick({
 });
 
 export const editOrgDepartmentValidator = z.object({
-  firstName: z
-    .string()
-    .min(2)
-    .transform((val) => capitalize(val)),
-  lastName: z
-    .string()
-    .min(2)
-    .transform((val) => capitalize(val)),
-  phone: z.string(),
+  name: z.string(),
+  roles: z.array(departmentRoleSchema),
 });
 
 export const DisabledValidator = z.object({
