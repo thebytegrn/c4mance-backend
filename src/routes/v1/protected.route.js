@@ -21,6 +21,7 @@ import { transferOrgMember } from "../../services/transferOrgMember.service.js";
 import { editDepartment } from "../../services/editDepartment.service.js";
 import { disableOrgDepartment } from "../../services/disableOrgDepartment.service.js";
 import { deleteOrgDepartment } from "../../services/deleteOrgDepartment.service.js";
+import { editOrgMemberProfile } from "../../services/editOrgMemberProfile.service.js";
 
 const protectedRouter = Router();
 
@@ -35,6 +36,7 @@ protectedRouter.get(
   getReportLineUpService,
 );
 protectedRouter.get("/orgs/members/:memberId/transfer", transferOrgMember);
+protectedRouter.patch("/orgs/members", editOrgMemberProfile);
 
 protectedRouter.get("/orgs/departments/search", searchOrgDepartments);
 protectedRouter.post("/orgs/departments", isAdminUser, addOrgDepartmentService);
