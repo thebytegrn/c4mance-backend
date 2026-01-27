@@ -17,7 +17,16 @@ export const changeOrgMemberPassword = async (req, res) => {
         .json({ success: false, message: "Account deleted" });
     }
 
-    const isCorrectPassword = bcrypt.compare(
+    if (currentPassword === newPassword) {
+      return res
+        .status(403)
+        .json({
+          success: false,
+          message: "New password cannot be the same as current password",
+        });
+    }
+
+    const isCorrectPassword = await bcrypt.compare(
       currentPassword,
       existingUser.password,
     );
