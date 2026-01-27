@@ -3,7 +3,10 @@ import { Department } from "../models/department.model.js";
 
 export const editDepartment = async (req, res) => {
   try {
-    const fields = editOrgDepartmentValidator.parse(req.body);
+    const fields = editOrgDepartmentValidator
+      .partial()
+      .strict()
+      .parse(req.body);
     const departmentId = req.params?.departmentId;
 
     const update = await Department.findByIdAndUpdate(departmentId, fields, {

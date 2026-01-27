@@ -40,7 +40,7 @@ protectedRouter.post("/orgs/members/:memberId/transfer", transferOrgMember);
 protectedRouter.patch("/orgs/members", editOrgMemberProfile);
 protectedRouter.patch("/orgs/members/change-password", changeOrgMemberPassword);
 
-protectedRouter.post(
+protectedRouter.patch(
   "/orgs/departments/:departmentId",
   isAdminUser,
   editDepartment,
