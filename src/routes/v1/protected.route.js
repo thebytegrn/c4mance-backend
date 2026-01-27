@@ -36,7 +36,7 @@ protectedRouter.get(
   "/orgs/reportlineup/:assignedDepartmentalRole",
   getReportLineUpService,
 );
-protectedRouter.get("/orgs/members/:memberId/transfer", transferOrgMember);
+protectedRouter.post("/orgs/members/:memberId/transfer", transferOrgMember);
 protectedRouter.patch("/orgs/members", editOrgMemberProfile);
 protectedRouter.patch("/orgs/members/change-password", changeOrgMemberPassword);
 
