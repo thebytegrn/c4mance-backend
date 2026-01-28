@@ -29,6 +29,7 @@ const UserSchema = new Schema(
     emailVerified: { type: Boolean, default: false },
     authTokenVersion: { type: Number, default: 0 },
     isDeleted: { type: Boolean, default: false },
+    isDisabled: { type: Boolean, default: false },
   },
   { timestamps: true },
 );
