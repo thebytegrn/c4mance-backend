@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { User } from "../models/user.model.js";
+import { Department } from "../models/department.model.js";
 
 export const getOrgDepartmentMembers = async (req, res) => {
   try {
@@ -12,6 +13,15 @@ export const getOrgDepartmentMembers = async (req, res) => {
       return res
         .status(400)
         .json({ success: false, message: "Invalid department ID" });
+    }
+
+    const dept = await Department.findById(departmentId).exec();
+
+    if (!dept || dept.isDeleted) {
+      return res.status(404).json({
+        success: false,
+        message: "Department with ID not found or deleted",
+      });
     }
 
     const filter = { departmentId };
