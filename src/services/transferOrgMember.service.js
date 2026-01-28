@@ -20,15 +20,15 @@ export const transferOrgMember = async (req, res) => {
     }
 
     const organizationId = req.authUser.organizationId;
-    const deptExist = await Department.findOne({
+    const dept = await Department.findOne({
       _id: departmentId,
       organizationId,
     }).exec();
 
-    if (!deptExist) {
+    if (!dept) {
       return res
         .status(404)
-        .json({ success: false, message: "Department not found" });
+        .json({ success: false, message: "Department with ID not found" });
     }
 
     const update = await User.findByIdAndUpdate(
