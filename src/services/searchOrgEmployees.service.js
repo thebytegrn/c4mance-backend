@@ -1,5 +1,5 @@
 import { User } from "../models/user.model.js";
-import { Department } from "../models/department.model.js";
+import mongoose from "mongoose";
 
 export const searchOrgEmployees = async (req, res) => {
   try {
@@ -11,34 +11,37 @@ export const searchOrgEmployees = async (req, res) => {
         .json({ success: false, mssage: "Missing query string" });
     }
 
-    const orgId = req.authUser.organizationId;
-
-    const departments = await Department.find({
-      organizationId: orgId,
-    })
-      .select("_id")
-      .lean()
-      .exec();
-
-    const departmentIds = departments.map((d) => d._id);
-
-    if (departmentIds.length === 0)
-      return res
-        .status(404)
-        .json({ success: false, message: "No departments found" });
-
-    const dbQuery = {
-      departmentId: { $in: departmentIds },
-    };
+    const orgId = new mongoose.Types.ObjectId(req.authUser.organizationId);
 
     const regex = new RegExp(searchQuery.trim(), "i");
 
-    dbQuery.$or = [{ firstName: regex }, { lastName: regex }];
-
-    const members = await User.find(dbQuery)
-      .lean()
-      .sort({ lastName: 1, firstName: 1 })
-      .select("-password");
+    const members = await User.aggregate([
+      {
+        $lookup: {
+          from: "departments",
+          localField: "departmentId",
+          foreignField: "_id",
+          as: "department",
+        },
+      },
+      {
+        $unwind: "$department",
+      },
+      {
+        $match: {
+          "department.organizationId": orgId,
+          $or: [{ firstName: regex }, { lastName: regex }],
+        },
+      },
+      {
+        $project: {
+          password: 0,
+        },
+      },
+      {
+        $sort: { lastName: 1, firstName: 1 },
+      },
+    ]);
 
     return res.status(200).json({
       success: true,
@@ -47,6 +50,9 @@ export const searchOrgEmployees = async (req, res) => {
     });
   } catch (error) {
     console.log("Error fetching employees: ", error);
-    throw error;
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching employees.",
+    });
   }
 };

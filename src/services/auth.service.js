@@ -16,7 +16,6 @@ import { redisClient } from "../index.js";
 import { RefreshToken } from "../models/refreshToken.model.js";
 import { USER_ROLES } from "../constants/userRoles.constant.js";
 import { Disabled } from "../models/disabled.model.js";
-import { Deleted } from "../models/deleted.model.js";
 
 export const refreshService = async (req, res) => {
   try {
@@ -57,7 +56,7 @@ export const refreshService = async (req, res) => {
     res.cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
       path: "/",
     });
@@ -89,19 +88,6 @@ export const loginService = async (req, res) => {
       return res
         .status(401)
         .json({ success: false, message: "Email or password is incorrect" });
-    }
-
-    const userDeptIsDeleted = await Deleted.findOne({
-      entityId: user.departmentId,
-    })
-      .lean()
-      .exec();
-
-    if (userDeptIsDeleted) {
-      return res.status(401).json({
-        success: false,
-        message: "Your assigned department no longer exist",
-      });
     }
 
     const userIsDisabled = await Disabled.findOne({
@@ -153,7 +139,7 @@ export const loginService = async (req, res) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
       path: "/",
     });

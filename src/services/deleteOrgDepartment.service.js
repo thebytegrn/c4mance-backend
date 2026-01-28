@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import { Department } from "../models/department.model.js";
-import { Deleted } from "../models/deleted.model.js";
 import { User } from "../models/user.model.js";
 
 export const deleteOrgDepartment = async (req, res) => {
@@ -13,20 +12,18 @@ export const deleteOrgDepartment = async (req, res) => {
         .json({ success: false, message: "Invalid department ID" });
     }
 
-    const dept = await Department.findByIdAndDelete(departmentId).exec();
+    const deletedDept = await Department.findOneAndUpdate(
+      { _id: departmentId, isDeleted: { $eq: false } },
+      {
+        isDeleted: true,
+      },
+    ).exec();
 
-    if (!dept) {
+    if (!deletedDept) {
       return res
-        .status(404)
-        .json({ success: false, message: "Department with ID not found" });
+        .status(400)
+        .json({ success: false, message: "Department with ID does not exist" });
     }
-
-    const deletedDept = new Deleted({
-      entityId: departmentId,
-      entity: "Department",
-    });
-
-    await deletedDept.save();
 
     await User.updateMany({ departmentId }, { $inc: { authTokenVersion: 1 } });
 

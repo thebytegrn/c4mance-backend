@@ -9,7 +9,7 @@ const UserSchema = new Schema(
   {
     firstName: { type: String, required: true, minLength: 2, index: true },
     lastName: { type: String, required: true, minLength: 2, index: true },
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true },
     password: { type: String, required: true, minLength: 8 },
     isRoot: { type: Boolean, default: false },
     profilePicture: String,
@@ -28,8 +28,14 @@ const UserSchema = new Schema(
     departmentRole: { type: String, enum: Object.values(DEPARTMENT_ROLES) },
     emailVerified: { type: Boolean, default: false },
     authTokenVersion: { type: Number, default: 0 },
+    isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true },
+);
+
+UserSchema.index(
+  { email: 1 },
+  { unique: true, partialFilterExpression: { isDeleted: { $eq: false } } },
 );
 
 UserSchema.pre("save", async function () {

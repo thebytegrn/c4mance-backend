@@ -12,6 +12,7 @@ const DepartmentSchema = new mongoose.Schema(
       ref: "Organization",
       index: true,
     },
+    isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true },
 );
