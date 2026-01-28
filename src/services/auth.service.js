@@ -18,7 +18,7 @@ import { USER_ROLES } from "../constants/userRoles.constant.js";
 
 export const refreshService = async (req, res) => {
   try {
-    const { refreshToken } = req.cookies;
+    const refreshToken = req.cookies["c4mance-refreshToken"];
 
     if (!refreshToken) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
