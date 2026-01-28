@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { DisabledValidator } from "../constants/validators.constants.js";
 import { Disabled } from "../models/disabled.model.js";
 import { User } from "../models/user.model.js";
+import { Department } from "../models/department.model.js";
 
 export const disableOrgDepartment = async (req, res) => {
   try {
@@ -14,6 +15,16 @@ export const disableOrgDepartment = async (req, res) => {
         .json({ success: false, message: "Invalid department ID" });
     }
 
+    const department = await Department.findByIdAndUpdate(departmentId, {
+      isDisabled: true,
+    }).exec();
+
+    if (!department) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Department with ID does not exist" });
+    }
+
     const disabledEntity = new Disabled({
       entityId: new mongoose.Types.ObjectId(departmentId),
       entity: "Department",
@@ -21,7 +32,6 @@ export const disableOrgDepartment = async (req, res) => {
     });
 
     await disabledEntity.save();
-
     await User.updateMany(
       { departmentId },
       { $inc: { authTokenVersion: 1 } },
