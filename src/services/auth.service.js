@@ -205,12 +205,17 @@ export const verifyEmailService = async (req, res) => {
 
 export const signUpService = async (req, res) => {
   try {
-    if (!req.body || !signUpValidator.parse(req.body))
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid form data" });
-
     const parsedForm = signUpValidator.parse(req.body);
+
+    const userEmailExist = await User.findOne({
+      email: parsedForm.email,
+    }).exec();
+
+    if (userEmailExist) {
+      return res
+        .status(409)
+        .json({ success: false, message: "Email already exist. Try login in" });
+    }
 
     const newUser = new User({
       ...parsedForm,
@@ -220,12 +225,24 @@ export const signUpService = async (req, res) => {
 
     await newUser.save();
 
+    res.cookie(
+      "onboard",
+      { isOnboarding: true, step: 1 },
+      {
+        httpOnly: false,
+        secure: false,
+        sameSite: "none",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        path: "/",
+      },
+    );
+
     const token = genToken();
     const emailVerificationURL = `${req.protocol}://${req.host}/v1/auth/verify-email?token=${token}`;
 
     await redisClient.setEx(
       `emailVerification:${token}`,
-      3600 * 24, // expires in a day
+      3600 * 24,
       JSON.stringify({ userId: newUser._id }),
     );
 
