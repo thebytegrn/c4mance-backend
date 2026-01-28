@@ -53,7 +53,7 @@ export const refreshService = async (req, res) => {
       },
     );
 
-    res.cookie("refreshToken", newRefreshToken, {
+    res.cookie("c4mance-refreshToken", newRefreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "none",
@@ -136,7 +136,7 @@ export const loginService = async (req, res) => {
 
     await saveRefreshToken.save();
 
-    res.cookie("refreshToken", refreshToken, {
+    res.cookie("c4mance-refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "none",
