@@ -226,7 +226,7 @@ export const signUpService = async (req, res) => {
     await newUser.save();
 
     res.cookie(
-      "onboard",
+      "c4mance-onboard",
       { isOnboarding: true, step: 1 },
       {
         httpOnly: false,
