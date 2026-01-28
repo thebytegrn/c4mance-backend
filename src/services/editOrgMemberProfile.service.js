@@ -1,10 +1,16 @@
-import { editOrgDepartmentValidator } from "../constants/validators.constants.js";
+import z from "zod";
+import { signUpValidator } from "../constants/validators.constants.js";
 import { User } from "../models/user.model.js";
 
 export const editOrgMemberProfile = async (req, res) => {
   try {
     const user = req.authUser;
-    const body = editOrgDepartmentValidator.partial().strict().parse(req.body);
+    const body = signUpValidator
+      .omit({ password: true })
+      .extend({ phone: z.string() })
+      .partial()
+      .strict()
+      .parse(req.body);
 
     const userUpdate = await User.findByIdAndUpdate(user._id, body, {
       new: true,
