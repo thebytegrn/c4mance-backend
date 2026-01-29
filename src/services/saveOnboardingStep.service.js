@@ -13,7 +13,7 @@ export const saveOnboardingStep = async (req, res) => {
 
     const userOnboardKey = `onBoardingUser:${req.authUser?.email}`;
 
-    await redisClient.set(userOnboardKey, JSON.stringify({ step: 1 }));
+    await redisClient.set(userOnboardKey, JSON.stringify({ step }));
 
     res.status(200).json({ success: true, message: "Step state saved" });
   } catch (error) {
