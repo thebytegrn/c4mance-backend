@@ -29,7 +29,6 @@ export const refreshService = async (req, res) => {
 
     const tokenExist = await RefreshToken.findOne({
       userId: decoded.userId,
-      token: refreshToken,
     }).exec();
 
     if (!user || !tokenExist) {
@@ -62,7 +61,7 @@ export const refreshService = async (req, res) => {
 
     await RefreshToken.findOneAndUpdate(
       { userId: user._id },
-      { token: newRefreshToken, tokenVersion: user.authTokenVersion },
+      { token: newRefreshToken },
     );
 
     return res.status(200).json({
@@ -71,7 +70,7 @@ export const refreshService = async (req, res) => {
       data: { accessToken },
     });
   } catch (error) {
-    console.log(error);
+    console.log("Error refreshing access token: ", error);
     return res
       .status(400)
       .json({ success: false, message: "Invalid/Expired token" });
@@ -103,6 +102,7 @@ export const loginService = async (req, res) => {
         .status(401)
         .json({ success: false, message: "Email or password is incorrect" });
     }
+    await RefreshToken.findOneAndDelete({ userId: user._id }).exec();
 
     const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "15m",
@@ -116,13 +116,13 @@ export const loginService = async (req, res) => {
       },
     );
 
-    const saveRefreshToken = new RefreshToken({
+    const newRefreshToken = new RefreshToken({
       token: refreshToken,
       userId: user._id,
       tokenVersion: user.authTokenVersion,
     });
 
-    await saveRefreshToken.save();
+    await newRefreshToken.save();
 
     res.cookie("c4mance-refreshToken", refreshToken, {
       httpOnly: true,

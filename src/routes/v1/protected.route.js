@@ -25,10 +25,15 @@ import { changeOrgMemberPassword } from "../../services/changeOrgMemberPassword.
 import { getMemberProfile } from "../../services/getMemberProfile.service.js";
 import { uploadLogo } from "../../services/uploadOrgLogo.service.js";
 import { uploadProfilePicture } from "../../services/uploadProfilePicture.service.js";
+import { nextOnboardingStep } from "../../services/nextOnboardingStep.service.js";
+import { deleteUserOnboardingState } from "../../services/deleteUserOnboardingState.service.js";
 
 const protectedRouter = Router();
 
 protectedRouter.use(authMiddleware);
+
+protectedRouter.patch("/onboarding/next", nextOnboardingStep);
+protectedRouter.delete("/onboarding/skip", deleteUserOnboardingState);
 
 protectedRouter.post("/orgs", isRootUser, createOrgService);
 protectedRouter.get("/orgs/members/search", searchOrgEmployees);
