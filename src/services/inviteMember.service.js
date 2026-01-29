@@ -6,6 +6,7 @@ import { inviteMemberTemplate } from "../templates/index.js";
 import { redisClient } from "../index.js";
 import mongoose from "mongoose";
 import { Department } from "../models/department.model.js";
+import { UserInvite } from "../models/userInvite.model.js";
 
 export const inviteMemberService = async (req, res) => {
   try {
@@ -24,8 +25,7 @@ export const inviteMemberService = async (req, res) => {
         .status(409)
         .json({ success: false, message: "Conflicting record, invite failed" });
 
-    const departmentId =
-      mongoose.isValidObjectId(body.departmentId) && body.departmentId;
+    const departmentId = mongoose.isValidObjectId(body.departmentId);
 
     if (!departmentId)
       return res
@@ -61,11 +61,15 @@ export const inviteMemberService = async (req, res) => {
       }),
     });
 
-    await redisClient.setEx(
-      memberInviteKey,
-      60 * 60 * 48,
-      JSON.stringify(body),
-    );
+    const userInvite = new UserInvite({
+      ...body.user,
+      departmentId: body.departmentId,
+      reportingLine: body.reportingLine,
+      departmentRole: body.departmentRole,
+      organizationId: req.authUser.organizationId,
+    });
+
+    await userInvite.save();
 
     return res
       .status(200)

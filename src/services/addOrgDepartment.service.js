@@ -8,7 +8,7 @@ export const addOrgDepartmentService = async (req, res) => {
     if (!req.authUser.organizationId)
       return res
         .status(403)
-        .json({ success: false, message: "Unable to add department" });
+        .json({ success: false, message: "Company setup required!" });
 
     const orgExist = await Organization.findById(
       req.authUser.organizationId,
@@ -17,7 +17,7 @@ export const addOrgDepartmentService = async (req, res) => {
     if (!orgExist)
       return res
         .status(403)
-        .json({ success: false, message: "Unable to add department" });
+        .json({ success: false, message: "Company setup required!" });
 
     const body = addOrgDepartmentValidator.parse(req.body);
 
