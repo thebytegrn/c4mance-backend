@@ -25,22 +25,32 @@ export const getPaginatedOrgMembers = async (req, res) => {
         data: {
           members: [],
           nextCursor: null,
+          all: 0,
+          disabled: 0,
+          active: 0,
         },
       });
     }
-    const filter = {
+
+    const baseFilter = {
       departmentId: { $in: departmentIds },
     };
 
+    const paginatedFilter = { ...baseFilter };
+
     if (mongoose.isValidObjectId(cursor)) {
-      filter._id = { $gt: cursor };
+      paginatedFilter._id = { $gt: cursor };
     }
 
-    const members = await User.find(filter)
-      .sort({ _id: 1 })
-      .limit(limit)
-      .select("-password")
-      .lean();
+    const [members, all, disabled] = await Promise.all([
+      User.find(paginatedFilter)
+        .sort({ _id: 1 })
+        .limit(limit)
+        .select("-password")
+        .lean(),
+      User.countDocuments(baseFilter),
+      User.countDocuments({ ...baseFilter, isDisabled: true }),
+    ]);
 
     let nextCursor = null;
     if (members.length === limit) {
@@ -53,6 +63,9 @@ export const getPaginatedOrgMembers = async (req, res) => {
       data: {
         members,
         nextCursor,
+        all,
+        disabled,
+        active: all - disabled,
       },
     });
   } catch (error) {
