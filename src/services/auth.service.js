@@ -132,10 +132,21 @@ export const loginService = async (req, res) => {
       path: "/",
     });
 
+    const userOnboardKey = `onBoardingUser:${user.email}`;
+    const userIsOnboarding = await redisClient.get(userOnboardKey);
+
+    const resData = {
+      accessToken,
+    };
+
+    if (userIsOnboarding) {
+      resData.onboardingStep = JSON.parse(userIsOnboarding).step;
+    }
+
     return res.status(200).json({
       success: true,
       message: "Login successful",
-      data: { accessToken },
+      data: resData,
     });
   } catch (error) {
     console.log(error);
@@ -234,10 +245,14 @@ export const signUpService = async (req, res) => {
       }),
     });
 
+    const userOnboardKey = `onBoardingUser:${newUser.email}`;
+    const userOnboarding = { step: 1 };
+
+    await redisClient.set(userOnboardKey, JSON.stringify(userOnboarding));
+
     return res.status(201).json({
       success: true,
       message: "User created successfully",
-      data: { onboard: true },
     });
   } catch (error) {
     console.log(error);
