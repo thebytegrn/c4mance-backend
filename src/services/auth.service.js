@@ -213,18 +213,6 @@ export const signUpService = async (req, res) => {
 
     await newUser.save();
 
-    res.cookie(
-      "c4mance-onboard",
-      { isOnboarding: true, step: 1 },
-      {
-        httpOnly: false,
-        secure: false,
-        sameSite: "none",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        path: "/",
-      },
-    );
-
     const token = genToken();
     const emailVerificationURL = `${req.protocol}://${req.host}/v1/auth/verify-email?token=${token}`;
 
@@ -246,9 +234,11 @@ export const signUpService = async (req, res) => {
       }),
     });
 
-    return res
-      .status(201)
-      .json({ success: true, message: "User created successfully" });
+    return res.status(201).json({
+      success: true,
+      message: "User created successfully",
+      data: { onboard: true },
+    });
   } catch (error) {
     console.log(error);
     throw error;
