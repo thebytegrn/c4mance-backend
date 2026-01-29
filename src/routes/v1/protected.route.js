@@ -5,7 +5,6 @@ import { upload } from "../../utils/upload.util.js";
 
 import { isAdminUser } from "../../middlewares/isAdminUser.middleware.js";
 import { isRootUser } from "../../middlewares/isRootUser.middleware.js";
-import { hasOrganization } from "../../middlewares/hasOrganization.middleware.js";
 import { addOrgDepartmentService } from "../../services/addOrgDepartment.service.js";
 import { inviteMemberService } from "../../services/inviteMember.service.js";
 import { getOrgDepartmentsService } from "../../services/getOrgDepartments.service.js";
@@ -27,6 +26,7 @@ import { uploadLogo } from "../../services/uploadOrgLogo.service.js";
 import { uploadProfilePicture } from "../../services/uploadProfilePicture.service.js";
 import { nextOnboardingStep } from "../../services/nextOnboardingStep.service.js";
 import { deleteUserOnboardingState } from "../../services/deleteUserOnboardingState.service.js";
+import { filterOrgMembers } from "../../services/filterOrgMembers.service.js";
 
 const protectedRouter = Router();
 
@@ -37,6 +37,7 @@ protectedRouter.delete("/onboarding/skip", deleteUserOnboardingState);
 
 protectedRouter.post("/orgs", isRootUser, createOrgService);
 protectedRouter.get("/orgs/members/search", searchOrgEmployees);
+protectedRouter.post("/orgs/members/filter", filterOrgMembers);
 protectedRouter.post("/orgs/members/invite", inviteMemberService);
 protectedRouter.get("/orgs/members", getPaginatedOrgMembers);
 protectedRouter.get("/orgs/members/profile", getMemberProfile);
@@ -71,7 +72,7 @@ protectedRouter.delete("/orgs/departments/:departmentId", deleteOrgDepartment);
 
 protectedRouter.post(
   "/upload/logo",
-  hasOrganization,
+  isRootUser,
   isAdminUser,
   upload.single("logoFile"),
   uploadLogo,
