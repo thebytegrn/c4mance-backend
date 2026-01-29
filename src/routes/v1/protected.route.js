@@ -24,7 +24,7 @@ import { changeOrgMemberPassword } from "../../services/changeOrgMemberPassword.
 import { getMemberProfile } from "../../services/getMemberProfile.service.js";
 import { uploadLogo } from "../../services/uploadOrgLogo.service.js";
 import { uploadProfilePicture } from "../../services/uploadProfilePicture.service.js";
-import { nextOnboardingStep } from "../../services/nextOnboardingStep.service.js";
+import { saveOnboardingStep } from "../../services/saveOnboardingStep.service.js";
 import { deleteUserOnboardingState } from "../../services/deleteUserOnboardingState.service.js";
 import { filterOrgMembers } from "../../services/filterOrgMembers.service.js";
 
@@ -32,7 +32,7 @@ const protectedRouter = Router();
 
 protectedRouter.use(authMiddleware);
 
-protectedRouter.patch("/onboarding/next", nextOnboardingStep);
+protectedRouter.patch("/onboarding", saveOnboardingStep);
 protectedRouter.delete("/onboarding/skip", deleteUserOnboardingState);
 
 protectedRouter.post("/orgs", isRootUser, createOrgService);
