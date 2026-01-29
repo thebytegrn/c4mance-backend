@@ -24,6 +24,7 @@ import { editOrgMemberProfile } from "../../services/editOrgMemberProfile.servic
 import { changeOrgMemberPassword } from "../../services/changeOrgMemberPassword.service.js";
 import { getMemberProfile } from "../../services/getMemberProfile.service.js";
 import { uploadLogo } from "../../services/uploadOrgLogo.service.js";
+import { uploadProfilePicture } from "../../services/uploadProfilePicture.service.js";
 
 const protectedRouter = Router();
 
@@ -69,6 +70,12 @@ protectedRouter.post(
   isAdminUser,
   upload.single("logoFile"),
   uploadLogo,
+);
+
+protectedRouter.post(
+  "/upload/profile-picture",
+  upload.single("profilePicture"),
+  uploadProfilePicture,
 );
 
 export default protectedRouter;

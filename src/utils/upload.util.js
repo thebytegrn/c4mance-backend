@@ -27,9 +27,9 @@ export const upload = multer({
     key: function (req, file, cb) {
       const uploadPath = req.path.split("/");
       const folderPrefix = uploadPath[uploadPath.length - 1];
-      const organizationId = req.authUser.organizationId;
+      const fileId = req.authUser.organizationId || req.authUser._id;
       const extension = file.originalname.split(".").pop();
-      const finalKey = `${folderPrefix}/${organizationId}.${extension}`;
+      const finalKey = `${folderPrefix}/${fileId}.${extension}`;
       cb(null, finalKey);
     },
   }),
