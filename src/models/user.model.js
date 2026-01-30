@@ -21,7 +21,7 @@ const UserSchema = new Schema(
       enum: Object.values(USER_ROLES),
     },
     departmentId: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Department",
       index: true,
     },

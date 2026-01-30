@@ -10,32 +10,32 @@ export const inviteMemberService = async (req, res) => {
   try {
     const body = orgMemberValidator.parse(req.body);
 
-    const isExistingMember = await User.findOne({ email: body.user.email })
-      .lean()
-      .exec();
+    const isValidDepartmentId = mongoose.isValidObjectId(body.departmentId);
 
-    if (isExistingMember) {
-      return res.status(409).json({
-        success: false,
-        message: "Employee with this email exist already",
-      });
-    }
-
-    const departmentId = mongoose.isValidObjectId(body.departmentId);
-
-    if (!departmentId)
+    if (!isValidDepartmentId)
       return res
         .status(400)
         .json({ success: false, message: "role or department does not exist" });
 
+    const department = await Department.findById(body.departmentId).exec();
     const departmentRole = body.departmentRole;
-
-    const department = await Department.findById(departmentId).exec();
 
     if (!(department && department.roles.includes(departmentRole))) {
       return res
         .status(400)
         .json({ success: false, message: "role or department does not exist" });
+    }
+
+    const isExistingMember = User.findOne({
+      departmentId: body.departmentId,
+      email: body.user.email,
+    }).exec();
+
+    if (isExistingMember) {
+      return res.status(409).json({
+        success: false,
+        message: "Employee with this email exist already in this organization",
+      });
     }
 
     const { firstName, lastName, email, phone } = body.user;
@@ -62,7 +62,7 @@ export const inviteMemberService = async (req, res) => {
       departmentId: new mongoose.Types.ObjectId(body.departmentId),
       reportingLine: body.reportingLine,
       departmentRole: body.departmentRole,
-      organizationId: req.authUser.organizationId,
+      organizationId: new mongoose.Types.ObjectId(req.authUser.organizationId),
     });
 
     await userInvite.save();

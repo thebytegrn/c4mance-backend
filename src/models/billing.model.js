@@ -7,7 +7,7 @@ const BillingSchema = new mongoose.Schema(
     charge: { type: Number, enum: Object.values(BILLING_PLAN), required: true },
     txRef: { type: String, required: true },
     organizationId: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Organization",
       required: true,
     },

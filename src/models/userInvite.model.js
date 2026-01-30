@@ -7,7 +7,7 @@ const UserInviteSchema = new mongoose.Schema({
   email: { type: String, required: true },
   phone: { type: String, required: true },
   departmentId: {
-    type: mongoose.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Department",
     required: true,
   },
@@ -18,7 +18,7 @@ const UserInviteSchema = new mongoose.Schema({
   },
   reportingLine: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
-  organizationId: { type: String, required: true },
+  organizationId: { type: mongoose.Schema.Types.ObjectId, required: true },
 });
 
 UserInviteSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 * 60 * 48 });

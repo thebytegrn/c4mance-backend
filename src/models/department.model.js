@@ -8,7 +8,7 @@ const DepartmentSchema = new mongoose.Schema(
       { type: String, required: true, enum: Object.values(DEPARTMENT_ROLES) },
     ],
     organizationId: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Organization",
       index: true,
     },
