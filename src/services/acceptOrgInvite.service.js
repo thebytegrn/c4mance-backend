@@ -7,6 +7,16 @@ export const acceptOrgInviteService = async (req, res) => {
   try {
     const { org: organizationId, email } = req.query;
 
+    if (
+      !organizationId ||
+      !mongoose.isValidObjectId(organizationId) ||
+      !email
+    ) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing required query params" });
+    }
+
     const invitedUser = await UserInvite.findOne({ organizationId, email })
       .lean()
       .exec();
