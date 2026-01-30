@@ -24,7 +24,7 @@ export const acceptOrgInviteService = async (req, res) => {
     if (!invitedUser) {
       return res
         .status(404)
-        .json({ success: false, message: "Invalid invite" });
+        .json({ success: false, message: "Invalid or expired invite" });
     }
 
     const { password: userPassword } = memberAcceptInviteValidator.parse(
