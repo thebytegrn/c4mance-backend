@@ -27,6 +27,7 @@ import { saveOnboardingStep } from "../../services/saveOnboardingStep.service.js
 import { deleteUserOnboardingState } from "../../services/deleteUserOnboardingState.service.js";
 import { filterOrgMembers } from "../../services/filterOrgMembers.service.js";
 import { getMembersInvites } from "../../services/getMembersInvites.service.js";
+import { getDepartmentRoles } from "../../services/getDepartmentRoles.service.js";
 
 const protectedRouter = Router();
 
@@ -50,14 +51,15 @@ protectedRouter.post("/orgs/members/:memberId/transfer", transferOrgMember);
 protectedRouter.patch("/orgs/members", editOrgMemberProfile);
 protectedRouter.patch("/orgs/members/change-password", changeOrgMemberPassword);
 
+protectedRouter.get("/orgs/departments/roles", getDepartmentRoles);
 protectedRouter.patch(
   "/orgs/departments/:departmentId",
   isAdminUser,
   editDepartment,
 );
+protectedRouter.get("/orgs/departments/:departmentId", getOrgDepartment);
 protectedRouter.get("/orgs/departments/search", searchOrgDepartments);
 protectedRouter.post("/orgs/departments", isAdminUser, addOrgDepartmentService);
-protectedRouter.get("/orgs/departments/:departmentId", getOrgDepartment);
 protectedRouter.get("/orgs/departments", getOrgDepartmentsService);
 
 protectedRouter.get(
