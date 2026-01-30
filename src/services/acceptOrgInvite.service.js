@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { memberAcceptInviteValidator } from "../constants/validators.constants.js";
 import { User } from "../models/user.model.js";
 import { UserInvite } from "../models/userInvite.model.js";
@@ -41,7 +42,7 @@ export const acceptOrgInviteService = async (req, res) => {
       reportingLine,
       password,
       departmentRole,
-      departmentId,
+      departmentId: new mongoose.Types.ObjectId(departmentId),
       emailVerified: true,
     });
 

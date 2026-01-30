@@ -59,7 +59,7 @@ export const inviteMemberService = async (req, res) => {
 
     const userInvite = new UserInvite({
       ...body.user,
-      departmentId: body.departmentId,
+      departmentId: new mongoose.Types.ObjectId(body.departmentId),
       reportingLine: body.reportingLine,
       departmentRole: body.departmentRole,
       organizationId: req.authUser.organizationId,
