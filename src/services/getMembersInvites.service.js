@@ -6,6 +6,7 @@ export const getMembersInvites = async (req, res) => {
 
     const invites = await UserInvite.find({ organizationId })
       .sort({ createdAt: -1 })
+      .populate("departmentId")
       .exec();
 
     return res
