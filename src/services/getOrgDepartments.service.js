@@ -17,6 +17,7 @@ export const getOrgDepartmentsService = async (req, res) => {
       {
         $match: {
           organizationId: orgId,
+          isDeleted: false,
         },
       },
     ];
