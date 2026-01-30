@@ -12,7 +12,7 @@ const UserSchema = new Schema(
     email: { type: String, required: true },
     password: { type: String, required: true, minLength: 8 },
     isRoot: { type: Boolean, default: false },
-    profilePicture: String,
+    profilePicture: { type: String, default: null },
     phone: String,
     reportingLine: { type: String, enum: Object.values(DEPARTMENT_ROLES) },
     role: {
