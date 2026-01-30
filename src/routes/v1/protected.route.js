@@ -52,13 +52,13 @@ protectedRouter.patch("/orgs/members", editOrgMemberProfile);
 protectedRouter.patch("/orgs/members/change-password", changeOrgMemberPassword);
 
 protectedRouter.get("/orgs/departments/roles", getDepartmentRoles);
+protectedRouter.get("/orgs/departments/search", searchOrgDepartments);
 protectedRouter.patch(
   "/orgs/departments/:departmentId",
   isAdminUser,
   editDepartment,
 );
 protectedRouter.get("/orgs/departments/:departmentId", getOrgDepartment);
-protectedRouter.get("/orgs/departments/search", searchOrgDepartments);
 protectedRouter.post("/orgs/departments", isAdminUser, addOrgDepartmentService);
 protectedRouter.get("/orgs/departments", getOrgDepartmentsService);
 
