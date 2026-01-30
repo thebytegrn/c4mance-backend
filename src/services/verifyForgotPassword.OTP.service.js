@@ -14,8 +14,10 @@ export const verifyForgotPasswordOTP = async (req, res) => {
     const sessionKey = `forgotPassword:${email}`;
 
     const hashedOTP = await redisClient.get(sessionKey);
+    console.log({ userEmail: email });
 
-    const isValidOTP = await bcrypt.compare(otp, hashedOTP);
+    const isValidOTP = await bcrypt.compare(String(otp), hashedOTP);
+    console.log({ isValidOTP });
 
     if (!isValidOTP)
       return res
