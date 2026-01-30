@@ -13,10 +13,12 @@ export const forgotPasswordService = async (req, res) => {
     const { email } = emailValidator.parse(req.body);
 
     const user = await User.findOne({ email }).exec();
-    if (!user)
-      return res
-        .status(401)
-        .json({ success: false, message: "Unable to process request" });
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User with this email does not exist",
+      });
+    }
 
     const otp = crypto.randomInt(100000, 900000);
 

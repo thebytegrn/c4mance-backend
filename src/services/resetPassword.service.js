@@ -24,8 +24,9 @@ export const resetPasswordService = async (req, res) => {
     user.password = password;
     await user.save();
 
-    req.session.resetPassword = null;
-    res.clearCookie("refreshToken");
+    res.clearCookie("c4mance-refreshToken");
+    res.clearCookie("connect.sid");
+    req.session.destroy();
 
     return res
       .status(200)
