@@ -10,7 +10,6 @@ import { inviteMemberService } from "../../services/inviteMember.service.js";
 import { getOrgDepartmentsService } from "../../services/getOrgDepartments.service.js";
 import { getReportLineUpService } from "../../services/getReportLineUp.service.js";
 import { getOrgDepartmentMembers } from "../../services/getOrgDepartmentMembers.service.js";
-import { getDepartmentRoles } from "../../services/getDepartmentRoles.service.js";
 import { getOrgDepartment } from "../../services/getOrgDepartment.service.js";
 import { searchOrgEmployees } from "../../services/searchOrgEmployees.service.js";
 import { getPaginatedOrgMembers } from "../../services/getPaginatedOrgMembers.service.js";
@@ -65,7 +64,7 @@ protectedRouter.get(
   "/orgs/departments/:departmentId/members",
   getOrgDepartmentMembers,
 );
-protectedRouter.get("/orgs/departments/roles", getDepartmentRoles);
+
 protectedRouter.post(
   "/orgs/departments/:departmentId/disable",
   disableOrgDepartment,
