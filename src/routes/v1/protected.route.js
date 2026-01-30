@@ -27,6 +27,7 @@ import { uploadProfilePicture } from "../../services/uploadProfilePicture.servic
 import { saveOnboardingStep } from "../../services/saveOnboardingStep.service.js";
 import { deleteUserOnboardingState } from "../../services/deleteUserOnboardingState.service.js";
 import { filterOrgMembers } from "../../services/filterOrgMembers.service.js";
+import { getMembersInvites } from "../../services/getMembersInvites.service.js";
 
 const protectedRouter = Router();
 
@@ -37,6 +38,7 @@ protectedRouter.delete("/onboarding/skip", deleteUserOnboardingState);
 
 protectedRouter.post("/orgs", isRootUser, createOrgService);
 protectedRouter.get("/orgs/members/search", searchOrgEmployees);
+protectedRouter.get("/orgs/members/invites", getMembersInvites);
 protectedRouter.post("/orgs/members/filter", filterOrgMembers);
 protectedRouter.post("/orgs/members/invite", inviteMemberService);
 protectedRouter.get("/orgs/members", getPaginatedOrgMembers);

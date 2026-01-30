@@ -1,29 +1,25 @@
 import { orgMemberValidator } from "../constants/validators.constants.js";
-import { User } from "../models/user.model.js";
-import { genToken } from "../utils/genToken.utils.js";
 import sendEmailQueue from "../queue/sendEmail.queue.js";
 import { inviteMemberTemplate } from "../templates/index.js";
-import { redisClient } from "../index.js";
 import mongoose from "mongoose";
 import { Department } from "../models/department.model.js";
 import { UserInvite } from "../models/userInvite.model.js";
+import { User } from "../models/user.model.js";
 
 export const inviteMemberService = async (req, res) => {
   try {
     const body = orgMemberValidator.parse(req.body);
 
-    const inviteToken = genToken();
+    const isExistingMember = User.findOne({ email: body.user.email })
+      .lean()
+      .exec();
 
-    const memberInviteKey = `orgMemberInvite:${inviteToken}`;
-
-    const exisitingInvite = await redisClient.get(memberInviteKey);
-
-    const existingUser = await User.findOne({ email: body.user.email }).exec();
-
-    if (exisitingInvite || existingUser)
-      return res
-        .status(409)
-        .json({ success: false, message: "Conflicting record, invite failed" });
+    if (isExistingMember) {
+      return res.status(409).json({
+        success: false,
+        message: "Employee with this email exist already",
+      });
+    }
 
     const departmentId = mongoose.isValidObjectId(body.departmentId);
 
@@ -44,7 +40,7 @@ export const inviteMemberService = async (req, res) => {
 
     const { firstName, lastName, email, phone } = body.user;
 
-    const memberInviteURL = `${body.redirectURL}?fName=${firstName}&lName=${lastName}&email=${email}&phone=${phone}&invite_token=${inviteToken}`;
+    const memberInviteURL = `${body.redirectURL}?fName=${firstName}&lName=${lastName}&email=${email}&phone=${phone}&org=${req.authUser.organizationId}`;
 
     const inviteBy = req.authUser.firstName.concat(" ", req.authUser.lastName);
 

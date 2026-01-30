@@ -1,42 +1,53 @@
-import mongoose from "mongoose";
 import { memberAcceptInviteValidator } from "../constants/validators.constants.js";
-import { redisClient } from "../index.js";
 import { User } from "../models/user.model.js";
+import { UserInvite } from "../models/userInvite.model.js";
 
 export const acceptOrgInviteService = async (req, res) => {
   try {
-    const inviteToken = req.query?.invite_token;
+    const { org: organizationId, email } = req.query;
 
-    const memberInviteKey = `orgMemberInvite:${inviteToken}`;
+    const invitedUser = await UserInvite.findOne({ organizationId, email })
+      .lean()
+      .exec();
 
-    const storedInvite = await redisClient.get(memberInviteKey);
-
-    if (!storedInvite)
+    if (!invitedUser) {
       return res
-        .status(400)
-        .json({ success: false, message: "Invite expired, contact admin" });
+        .status(404)
+        .json({ success: false, message: "Invalid invite" });
+    }
 
     const { password: userPassword } = memberAcceptInviteValidator.parse(
       req.body,
     );
 
-    const parsedStore = JSON.parse(storedInvite);
+    invitedUser.password = userPassword;
 
-    parsedStore.user.password = userPassword;
-
-    const user = parsedStore.user;
+    const {
+      firstName,
+      lastName,
+      email: userEmail,
+      phone,
+      password,
+      reportingLine,
+      departmentRole,
+      departmentId,
+    } = invitedUser;
 
     const newUser = new User({
-      ...user,
-      departmentRole: parsedStore.departmentRole,
-      departmentId: new mongoose.Types.ObjectId(parsedStore.departmentId),
-      reportingLine: parsedStore.reportingLine,
+      firstName,
+      lastName,
+      email: userEmail,
+      phone,
+      reportingLine,
+      password,
+      departmentRole,
+      departmentId,
       emailVerified: true,
     });
 
     await newUser.save();
 
-    await redisClient.del(memberInviteKey);
+    await UserInvite.findByIdAndDelete(invitedUser._id).exec();
 
     return res
       .status(201)
