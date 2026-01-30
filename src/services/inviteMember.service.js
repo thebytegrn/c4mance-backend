@@ -26,7 +26,7 @@ export const inviteMemberService = async (req, res) => {
         .json({ success: false, message: "role or department does not exist" });
     }
 
-    const isExistingMember = User.findOne({
+    const isExistingMember = await User.findOne({
       departmentId: body.departmentId,
       email: body.user.email,
     }).exec();
