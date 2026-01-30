@@ -10,7 +10,7 @@ export const inviteMemberService = async (req, res) => {
   try {
     const body = orgMemberValidator.parse(req.body);
 
-    const isExistingMember = User.findOne({ email: body.user.email })
+    const isExistingMember = await User.findOne({ email: body.user.email })
       .lean()
       .exec();
 
