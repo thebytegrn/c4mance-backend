@@ -8,18 +8,22 @@ export const resetPasswordService = async (req, res) => {
     const { password } = resetPasswordValidator.parse(req.body);
 
     const email = req.session.resetPassword;
+    console.log({ email });
 
-    if (!email)
+    if (!email) {
       return res
         .status(401)
         .json({ success: false, message: "Unauthorized, request OTP" });
+    }
 
     const user = await User.findOne({ email }).exec();
+    console.log({ user });
 
-    if (!user)
+    if (!user) {
       return res
         .status(401)
         .json({ success: false, message: "Unauthorized, request OTP" });
+    }
 
     user.password = password;
     await user.save();
