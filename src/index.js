@@ -8,6 +8,7 @@ import { connectRedis } from "./database/redis.database.js";
 import { ZodError } from "zod";
 import cors from "cors";
 import { MulterError } from "multer";
+import { paystackWebhookService } from "./services/webhook/paystack.service.js";
 
 export const redisClient = await connectRedis();
 
@@ -54,6 +55,7 @@ app.use(
 );
 
 app.use("/v1", v1Router);
+app.post("/hook/c4mance/web", paystackWebhookService);
 
 app.get("/ping", (req, res) => {
   res.send("pong!");

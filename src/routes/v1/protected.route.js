@@ -28,6 +28,7 @@ import { deleteUserOnboardingState } from "../../services/deleteUserOnboardingSt
 import { filterOrgMembers } from "../../services/filterOrgMembers.service.js";
 import { getMembersInvites } from "../../services/getMembersInvites.service.js";
 import { getDepartmentRoles } from "../../services/getDepartmentRoles.service.js";
+import { initializeSubscription } from "../../services/initializeSubscription.service.js";
 
 const protectedRouter = Router();
 
@@ -72,6 +73,7 @@ protectedRouter.post(
   disableOrgDepartment,
 );
 protectedRouter.delete("/orgs/departments/:departmentId", deleteOrgDepartment);
+protectedRouter.get("/sub/init", initializeSubscription);
 
 protectedRouter.post(
   "/upload/logo",
