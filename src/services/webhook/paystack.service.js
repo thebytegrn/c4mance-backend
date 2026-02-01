@@ -11,6 +11,11 @@ export const paystackWebhookService = (req, res) => {
     if (hash == req.headers["x-paystack-signature"]) {
       const event = req.body;
       console.log(event);
+      let newCustomer = "";
+      if (event.data.metadata?.newCustomer) {
+        newCustomer = event.data.metadata?.newCustomer;
+        console.log(newCustomer);
+      }
     }
     return res.send(200);
   } catch (error) {

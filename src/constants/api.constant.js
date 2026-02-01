@@ -1,8 +1,11 @@
-const PAYSTACK_DEFAULT_HEADERS = new Headers();
+import axios from "axios";
 
 const PAYSTACK_SECRET = process.env.PAYSTACK_SECRET;
 
-PAYSTACK_DEFAULT_HEADERS.append("Content-Type", "application/json");
-PAYSTACK_DEFAULT_HEADERS.append("Authorization", `Bearer ${PAYSTACK_SECRET}`);
-
-export const headers = { PAYSTACK_DEFAULT_HEADERS };
+export const paystackAxios = axios.create({
+  baseURL: "https://api.paystack.co",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${PAYSTACK_SECRET}`,
+  },
+});

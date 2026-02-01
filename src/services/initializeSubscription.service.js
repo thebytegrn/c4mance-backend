@@ -1,10 +1,9 @@
-import { headers } from "../constants/api.constant.js";
+import { paystackAxios } from "../constants/api.constant.js";
 import { BillingPlan } from "../models/billingPlan.model.js";
+import { getEmailPlusAddressing } from "../utils/getEmailPlusAddressing.util.js";
 
 export const initializeSubscription = async (req, res) => {
   try {
-    const initSubURL = "https://api.paystack.co/transaction/initialize";
-
     const user = req.authUser;
 
     if (!user.isRoot) {
@@ -22,22 +21,38 @@ export const initializeSubscription = async (req, res) => {
     }
 
     const billingPlan = await BillingPlan.findOne({ planCode }).exec();
+
+    if (!billingPlan) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid plan code" });
+    }
+
     const planCost = billingPlan.amount * 100;
 
+    const customerEmail = getEmailPlusAddressing(user.email);
+
     const initSubOptions = {
-      email: user.email,
+      email: customerEmail,
       plan: planCode,
       amount: planCost,
+      metadata: { newCustomer: req.authUser._id },
     };
 
-    const subRes = await fetch(initSubURL, {
-      method: "POST",
-      headers,
-      body: JSON.stringify(initSubOptions),
-    });
+    const subRes = await paystackAxios.post(
+      "/transaction/initialize",
+      initSubOptions,
+    );
 
-    console.log({ subscriptionResponse: subRes });
-    res.send("subscribe");
+    if (subRes.status !== 200) {
+      throw new Error();
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Subscription link created",
+      data: { url: subRes.data.data.authorization_url },
+    });
   } catch (error) {
     console.log("Error initializing subscription", error);
     throw error;
