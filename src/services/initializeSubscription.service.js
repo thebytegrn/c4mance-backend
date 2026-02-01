@@ -36,6 +36,7 @@ export const initializeSubscription = async (req, res) => {
       email: customerEmail,
       plan: planCode,
       amount: planCost,
+      callback_url,
       metadata: { newCustomer: req.authUser._id },
     };
 

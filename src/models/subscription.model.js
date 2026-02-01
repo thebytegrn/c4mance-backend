@@ -5,10 +5,9 @@ const SubscriptionSchema = new mongoose.Schema(
     customer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
     },
-    customerCode: { type: String, index: true, required: true },
-    subscriptionCode: { type: String, index: true, required: true },
+    customerCode: { type: String, index: true },
+    subscriptionCode: { type: String, index: true },
     isActive: { type: Boolean, default: false },
   },
   { timestamps: true },

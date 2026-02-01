@@ -1,6 +1,7 @@
 import crypto from "crypto";
+import { paystackEventQueue } from "../../queue/paystack.queue.js";
 
-export const paystackWebhookService = (req, res) => {
+export const paystackWebhookService = async (req, res) => {
   try {
     const secret = process.env.PAYSTACK_SECRET;
     const hash = crypto
@@ -9,17 +10,11 @@ export const paystackWebhookService = (req, res) => {
       .digest("hex");
 
     if (hash == req.headers["x-paystack-signature"]) {
-      const event = req.body;
-      console.log(event);
-      let newCustomer = "";
-      if (event.data.metadata?.newCustomer) {
-        newCustomer = event.data.metadata?.newCustomer;
-        console.log(newCustomer);
-      }
+      await paystackEventQueue.add("paystackEvent", req.body);
+      return res.sendStatus(200);
     }
-    return res.send(200);
   } catch (error) {
-    console.log("Error in Paystack webhook service");
+    console.log("Error in Paystack webhook service", error);
     throw error;
   }
 };
