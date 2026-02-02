@@ -30,7 +30,10 @@ export const initializeSubscription = async (req, res) => {
 
     const planCost = billingPlan.amount * 100;
 
-    const customerEmail = getEmailPlusAddressing(user.email);
+    const customerEmail =
+      process.env.NODE_ENV === "local"
+        ? getEmailPlusAddressing(user.email)
+        : user.email;
 
     const initSubOptions = {
       email: customerEmail,
