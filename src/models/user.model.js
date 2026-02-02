@@ -34,6 +34,15 @@ const UserSchema = new Schema(
   { timestamps: true },
 );
 
+UserSchema.virtual("department", {
+  ref: "Department",
+  localField: "departmentId",
+  foreignField: "_id",
+  justOne: true,
+});
+UserSchema.set("toJSON", { virtuals: true });
+UserSchema.set("toObject", { virtuals: true });
+
 UserSchema.index(
   { email: 1 },
   { unique: true, partialFilterExpression: { isDeleted: { $eq: false } } },
