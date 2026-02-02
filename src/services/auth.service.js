@@ -15,6 +15,9 @@ import { genToken } from "../utils/genToken.utils.js";
 import { redisClient } from "../index.js";
 import { RefreshToken } from "../models/refreshToken.model.js";
 import { USER_ROLES } from "../constants/userRoles.constant.js";
+import { Organization } from "../models/organization.model.js";
+import { Subscription } from "../models/subscription.model.js";
+import { Department } from "../models/department.model.js";
 
 export const refreshService = async (req, res) => {
   try {
@@ -108,11 +111,47 @@ export const loginService = async (req, res) => {
       expiresIn: "15m",
     });
 
+    let refreshTokenCookieExInMs = 7 * 24 * 60 * 60 * 1000;
+    let refreshTokneExpiresIn = "7d";
+
+    if (user.isRoot) {
+      const userSubscription = await Subscription.findOne({
+        customer: user._id,
+      })
+        .select("isActive")
+        .exec();
+
+      if (!userSubscription || !userSubscription.isActive) {
+        refreshTokenCookieExInMs = 1 * 24 * 60 * 60 * 1000;
+        refreshTokneExpiresIn = "1d";
+      }
+    } else {
+      const userOrg = await Department.findById(user.departmentId)
+        .select("organizationId")
+        .exec();
+      const customer = await Organization.findById(userOrg)
+        .select("ownerId")
+        .exec();
+
+      const customerSubscriptionIsActive = await Subscription.findOne({
+        customer,
+      })
+        .select("isActive")
+        .exec();
+
+      if (!customerSubscriptionIsActive) {
+        return res.status(403).json({
+          success: false,
+          message: "Your company subscription is inactive",
+        });
+      }
+    }
+
     const refreshToken = jwt.sign(
       { userId: user._id, version: user.authTokenVersion },
       process.env.JWT_SECRET,
       {
-        expiresIn: "7d",
+        expiresIn: refreshTokneExpiresIn,
       },
     );
 
@@ -128,7 +167,7 @@ export const loginService = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "none",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: refreshTokenCookieExInMs,
       path: "/",
     });
 

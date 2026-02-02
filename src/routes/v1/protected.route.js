@@ -29,6 +29,7 @@ import { filterOrgMembers } from "../../services/filterOrgMembers.service.js";
 import { getMembersInvites } from "../../services/getMembersInvites.service.js";
 import { getDepartmentRoles } from "../../services/getDepartmentRoles.service.js";
 import { initializeSubscription } from "../../services/initializeSubscription.service.js";
+import { getSubscriptionPlans } from "../../services/getSubscriptionPlans.service.js";
 
 const protectedRouter = Router();
 
@@ -73,7 +74,8 @@ protectedRouter.post(
   disableOrgDepartment,
 );
 protectedRouter.delete("/orgs/departments/:departmentId", deleteOrgDepartment);
-protectedRouter.get("/sub/init", initializeSubscription);
+protectedRouter.get("/subs/init", initializeSubscription);
+protectedRouter.get("/subs/plans", getSubscriptionPlans);
 
 protectedRouter.post(
   "/upload/logo",
