@@ -41,7 +41,7 @@ protectedRouter.delete("/onboarding/skip", deleteUserOnboardingState);
 protectedRouter.post("/orgs", isRootUser, createOrgService);
 protectedRouter.get("/orgs/members/search", searchOrgEmployees);
 protectedRouter.get("/orgs/members/invites", getMembersInvites);
-protectedRouter.post("/orgs/members/filter", filterOrgMembers);
+protectedRouter.get("/orgs/members/filter", filterOrgMembers);
 protectedRouter.post("/orgs/members/invite", inviteMemberService);
 protectedRouter.get("/orgs/members", getPaginatedOrgMembers);
 protectedRouter.get("/orgs/members/profile", getMemberProfile);
