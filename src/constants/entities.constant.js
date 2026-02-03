@@ -1,1 +1,1 @@
-export const Entities = ["User", "Department"];
+export const Entities = ["User", "Employee", "Department"];

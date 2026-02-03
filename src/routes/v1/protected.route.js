@@ -32,6 +32,7 @@ import { initializeSubscription } from "../../services/initializeSubscription.se
 import { getSubscriptionPlans } from "../../services/getSubscriptionPlans.service.js";
 import { viewOrgMember } from "../../services/viewOrgMember.service.js";
 import { adminEditMemberProfile } from "../../services/adminEditMemberProfile.service.js";
+import { disableOrgMember } from "../../services/disableOrgMember.service.js";
 
 const protectedRouter = Router();
 
@@ -56,6 +57,7 @@ protectedRouter.patch("/orgs/members", editOrgMemberProfile);
 protectedRouter.patch("/orgs/members/change-password", changeOrgMemberPassword);
 protectedRouter.get("/orgs/members/:memberId", viewOrgMember);
 protectedRouter.patch("/orgs/members/:memberId/admin", adminEditMemberProfile);
+protectedRouter.post("/orgs/members/:memberId/disable", disableOrgMember);
 
 protectedRouter.get("/orgs/departments/roles", getDepartmentRoles);
 protectedRouter.get("/orgs/departments/search", searchOrgDepartments);
