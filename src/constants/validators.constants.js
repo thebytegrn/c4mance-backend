@@ -49,6 +49,22 @@ export const orgMemberValidator = z.object({
   redirectURL: z.url(),
 });
 
+export const adminEditOrgMemberValidator = z.object({
+  firstName: z
+    .string()
+    .min(2)
+    .transform((val) => capitalize(val)),
+  lastName: z
+    .string()
+    .min(2)
+    .transform((val) => capitalize(val)),
+  phone: z.string(),
+  email: z.email(),
+  departmentId: z.string(),
+  departmentRole: z.enum(DEPARTMENT_ROLES),
+  reportingLine: z.string(DEPARTMENT_ROLES),
+});
+
 export const memberAcceptInviteValidator = signUpValidator.pick({
   password: true,
 });

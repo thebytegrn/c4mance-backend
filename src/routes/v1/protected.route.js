@@ -31,6 +31,7 @@ import { getDepartmentRoles } from "../../services/getDepartmentRoles.service.js
 import { initializeSubscription } from "../../services/initializeSubscription.service.js";
 import { getSubscriptionPlans } from "../../services/getSubscriptionPlans.service.js";
 import { viewOrgMember } from "../../services/viewOrgMember.service.js";
+import { adminEditMemberProfile } from "../../services/adminEditMemberProfile.service.js";
 
 const protectedRouter = Router();
 
@@ -54,6 +55,7 @@ protectedRouter.post("/orgs/members/:memberId/transfer", transferOrgMember);
 protectedRouter.patch("/orgs/members", editOrgMemberProfile);
 protectedRouter.patch("/orgs/members/change-password", changeOrgMemberPassword);
 protectedRouter.get("/orgs/members/:memberId", viewOrgMember);
+protectedRouter.patch("/orgs/members/:memberId/admin", adminEditMemberProfile);
 
 protectedRouter.get("/orgs/departments/roles", getDepartmentRoles);
 protectedRouter.get("/orgs/departments/search", searchOrgDepartments);

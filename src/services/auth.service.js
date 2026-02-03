@@ -54,10 +54,11 @@ export const refreshService = async (req, res) => {
       },
     );
 
+    const isProduction = process.env.NODE_ENV === "production";
     res.cookie("c4mance-refreshToken", newRefreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
       path: "/",
     });
@@ -163,10 +164,11 @@ export const loginService = async (req, res) => {
 
     await newRefreshToken.save();
 
+    const isProduction = process.env.NODE_ENV === "production";
     res.cookie("c4mance-refreshToken", refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
       maxAge: refreshTokenCookieExInMs,
       path: "/",
     });

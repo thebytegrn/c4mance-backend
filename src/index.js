@@ -38,6 +38,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
+const isProduction = process.env.NODE_ENV === "production";
 app.use(
   session({
     store: redisStore,
@@ -46,8 +47,8 @@ app.use(
     resave: false,
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
       maxAge: 1000 * 60 * 30,
       path: "/",
     },
