@@ -46,6 +46,7 @@ export const getPaginatedOrgMembers = async (req, res) => {
       User.find(paginatedFilter)
         .sort({ _id: 1 })
         .limit(limit)
+        .populate("department")
         .select("-password")
         .lean(),
       User.countDocuments(baseFilter),
