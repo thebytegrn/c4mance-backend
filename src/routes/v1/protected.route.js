@@ -30,6 +30,7 @@ import { getMembersInvites } from "../../services/getMembersInvites.service.js";
 import { getDepartmentRoles } from "../../services/getDepartmentRoles.service.js";
 import { initializeSubscription } from "../../services/initializeSubscription.service.js";
 import { getSubscriptionPlans } from "../../services/getSubscriptionPlans.service.js";
+import { viewOrgMember } from "../../services/viewOrgMember.service.js";
 
 const protectedRouter = Router();
 
@@ -52,6 +53,7 @@ protectedRouter.get(
 protectedRouter.post("/orgs/members/:memberId/transfer", transferOrgMember);
 protectedRouter.patch("/orgs/members", editOrgMemberProfile);
 protectedRouter.patch("/orgs/members/change-password", changeOrgMemberPassword);
+protectedRouter.get("/orgs/members/:memberId", viewOrgMember);
 
 protectedRouter.get("/orgs/departments/roles", getDepartmentRoles);
 protectedRouter.get("/orgs/departments/search", searchOrgDepartments);
