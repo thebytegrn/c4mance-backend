@@ -34,6 +34,7 @@ import { viewOrgMember } from "../../services/viewOrgMember.service.js";
 import { adminEditMemberProfile } from "../../services/adminEditMemberProfile.service.js";
 import { disableOrgMember } from "../../services/disableOrgMember.service.js";
 import { deleteOrgMember } from "../../services/deleteOrgMember.service.js";
+import { companySettingsProfile } from "../../services/companySettingsProfile.service.js";
 
 const protectedRouter = Router();
 
@@ -70,6 +71,7 @@ protectedRouter.patch(
 protectedRouter.get("/orgs/departments/:departmentId", getOrgDepartment);
 protectedRouter.post("/orgs/departments", isAdminUser, addOrgDepartmentService);
 protectedRouter.get("/orgs/departments", getOrgDepartmentsService);
+protectedRouter.patch("/orgs/settings/profile", companySettingsProfile);
 
 protectedRouter.get(
   "/orgs/departments/:departmentId/members",

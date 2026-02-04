@@ -65,6 +65,15 @@ export const adminEditOrgMemberValidator = z.object({
   reportingLine: z.string(DEPARTMENT_ROLES),
 });
 
+export const companySettingsProfileValidator = z.object({
+  name: z.string(),
+  email: z.email(),
+  address: z.string(),
+  phone: z.string(),
+  registrationType: z.string(),
+  cacRegistrationNumber: z.string(),
+});
+
 export const memberAcceptInviteValidator = signUpValidator.pick({
   password: true,
 });
