@@ -33,14 +33,12 @@ export const paystackEventWorker = new Worker(
           }).exec();
 
           if (subCreated) {
-            subCreated.isActive = true;
             subCreated.customer = newCustomer;
             await subCreated.save();
           } else {
             const newSub = new Subscription({
-              isActive: true,
-              customer: newCustomer,
               customerCode: eventData.customer.customer_code,
+              customer: newCustomer,
             });
             await newSub.save();
           }
@@ -64,11 +62,15 @@ export const paystackEventWorker = new Worker(
 
         if (createdSub) {
           createdSub.subscriptionCode = eventData.subscription_code;
+          createdSub.plan = eventData.plan.plan_code;
+          createdSub.status = eventData.status;
           await createdSub.save();
         } else {
           const newSub = new Subscription({
             subscriptionCode: eventData.subscription_code,
             customerCode: eventData.customer.customer_code,
+            status: eventData.status,
+            plan: eventData.plan.plan_code,
           });
           await newSub.save();
         }
