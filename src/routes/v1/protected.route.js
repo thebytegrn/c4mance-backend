@@ -36,6 +36,7 @@ import { disableOrgMember } from "../../services/disableOrgMember.service.js";
 import { deleteOrgMember } from "../../services/deleteOrgMember.service.js";
 import { companySettingsProfile } from "../../services/companySettingsProfile.service.js";
 import { getCustomerSubscriptions } from "../../services/getCustomerSubscriptions.service.js";
+import { getCustomerSubscriptionCards } from "../../services/getCustomerSubscriptionCards.service.js";
 
 const protectedRouter = Router();
 
@@ -76,6 +77,10 @@ protectedRouter.patch("/orgs/settings/profile", companySettingsProfile);
 protectedRouter.get(
   "/orgs/settings/billing/subs/plans",
   getCustomerSubscriptions,
+);
+protectedRouter.get(
+  "/orgs/settings/billing/subs/cards",
+  getCustomerSubscriptionCards,
 );
 protectedRouter.get(
   "/orgs/departments/:departmentId/members",
