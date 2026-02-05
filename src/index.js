@@ -28,6 +28,7 @@ app.use(
       "https://c4mance.com",
       "https://www.c4mance.com",
       "http://localhost:3000",
+      "https://localhost:3000",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
