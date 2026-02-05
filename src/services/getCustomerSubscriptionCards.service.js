@@ -27,7 +27,7 @@ export const getCustomerSubscriptionCards = async (req, res) => {
 
     return res
       .status(200)
-      .json({ success: false, message: "Customer cards", data: { cards } });
+      .json({ success: true, message: "Customer cards", data: { cards } });
   } catch (error) {
     console.log("Error getting customer subscriptions ", error);
     throw error;
