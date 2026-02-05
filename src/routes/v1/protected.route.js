@@ -37,7 +37,7 @@ import { deleteOrgMember } from "../../services/deleteOrgMember.service.js";
 import { companySettingsProfile } from "../../services/companySettingsProfile.service.js";
 import { getCustomerSubscriptions } from "../../services/getCustomerSubscriptions.service.js";
 import { getCustomerSubscriptionCards } from "../../services/getCustomerSubscriptionCards.service.js";
-import { getEditCustomerSubscriptionCardPageLink } from "../../services/getEditCustomerSubscriptionCardPageLink.service.js";
+import { getManageCustomerSubscriptionCardPageLink } from "../../services/getManageCustomerSubscriptionCardPageLink.service.js";
 
 const protectedRouter = Router();
 
@@ -86,7 +86,7 @@ protectedRouter.get(
 
 protectedRouter.get(
   "/orgs/settings/billing/subs/cards/edit",
-  getEditCustomerSubscriptionCardPageLink,
+  getManageCustomerSubscriptionCardPageLink,
 );
 
 protectedRouter.get(

@@ -1,7 +1,7 @@
 import { paystackAxios } from "../constants/api.constant.js";
 import { Subscription } from "../models/subscription.model.js";
 
-export const getEditCustomerSubscriptionCardPageLink = async (req, res) => {
+export const getManageCustomerSubscriptionCardPageLink = async (req, res) => {
   try {
     const customerSub = await Subscription.findOne({
       customer: req.authUser._id,
@@ -15,12 +15,10 @@ export const getEditCustomerSubscriptionCardPageLink = async (req, res) => {
       throw new Error("Failed to generate card management link");
     }
 
-    return res
-      .status(200)
-      .json({
-        success: true,
-        data: { redirectURL: genLinkRes.data.data.link },
-      });
+    return res.status(200).json({
+      success: true,
+      data: { redirectURL: genLinkRes.data.data.link },
+    });
   } catch (error) {
     console.log("Error getting customer card update page", error);
     throw error;
