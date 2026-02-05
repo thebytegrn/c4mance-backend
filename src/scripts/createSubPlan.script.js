@@ -3,7 +3,12 @@ import { BillingPlan } from "../models/billingPlan.model.js";
 
 (async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/c4mance");
+    const mongo_uri =
+      process.env.NODE_ENV === "local"
+        ? "mongodb://localhost:27017/c4mance"
+        : "mongodb+srv://greenbrightsmart_db_user:NRg5XTzjpiynjQW5@cluster0.rgklosr.mongodb.net/c4mance";
+
+    await mongoose.connect(mongo_uri);
 
     const monthlyPlan = new BillingPlan({
       name: "Monthly Subscription",
