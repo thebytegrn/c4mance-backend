@@ -118,10 +118,10 @@ export const loginService = async (req, res) => {
       const userSubscription = await Subscription.findOne({
         customer: user._id,
       })
-        .select("isActive")
+        .select("status")
         .exec();
 
-      if (!userSubscription || !userSubscription.isActive) {
+      if (!userSubscription || !userSubscription.status === "active") {
         refreshTokenCookieExInMs = 1 * 24 * 60 * 60 * 1000;
         refreshTokneExpiresIn = "1d";
       }
