@@ -10,7 +10,6 @@ const SubscriptionSchema = new mongoose.Schema(
     subscriptionCode: { type: String, index: true },
     status: { type: String, default: false },
     plan: { type: String, required: true },
-    defaultCard: String,
   },
   { timestamps: true },
 );
