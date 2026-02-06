@@ -121,7 +121,7 @@ export const loginService = async (req, res) => {
         .select("status")
         .exec();
 
-      if (!userSubscription || !userSubscription.status === "active") {
+      if (!userSubscription || userSubscription.status !== "active") {
         refreshTokenCookieExInMs = 1 * 24 * 60 * 60 * 1000;
         refreshTokneExpiresIn = "1d";
       }
