@@ -38,6 +38,7 @@ import { companySettingsProfile } from "../../services/companySettingsProfile.se
 import { getCustomerSubscriptions } from "../../services/getCustomerSubscriptions.service.js";
 import { getCustomerSubscriptionCards } from "../../services/getCustomerSubscriptionCards.service.js";
 import { getManageCustomerSubscriptionCardPageLink } from "../../services/getManageCustomerSubscriptionCardPageLink.service.js";
+import { changeCustomerSubscriptionPlan } from "../../services/changeCustomerSubscriptionPlan.service.js";
 
 const protectedRouter = Router();
 
@@ -87,6 +88,11 @@ protectedRouter.get(
 protectedRouter.get(
   "/orgs/settings/billing/subs/cards/edit",
   getManageCustomerSubscriptionCardPageLink,
+);
+
+protectedRouter.post(
+  "/orgs/settings/billing/subs/change",
+  changeCustomerSubscriptionPlan,
 );
 
 protectedRouter.get(
