@@ -71,7 +71,6 @@ export const paystackEventWorker = new Worker(
             customerCode: eventData.customer.customer_code,
             status: eventData.status,
             plan: eventData.plan.plan_code,
-            defaultCard: eventData.authorization.authorization_code,
           });
           await newSub.save();
         }
