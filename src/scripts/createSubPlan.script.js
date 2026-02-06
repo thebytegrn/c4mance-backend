@@ -3,10 +3,7 @@ import { BillingPlan } from "../models/billingPlan.model.js";
 
 (async () => {
   try {
-    const mongo_uri =
-      process.env.NODE_ENV === "local"
-        ? "mongodb://localhost:27017/c4mance"
-        : "mongodb+srv://greenbrightsmart_db_user:NRg5XTzjpiynjQW5@cluster0.rgklosr.mongodb.net/c4mance";
+    const mongo_uri = ""; // remeber to remove uri after use
 
     await mongoose.connect(mongo_uri);
 
