@@ -39,10 +39,13 @@ import { getCustomerSubscriptions } from "../../services/getCustomerSubscription
 import { getCustomerSubscriptionCards } from "../../services/getCustomerSubscriptionCards.service.js";
 import { getManageCustomerSubscriptionCardPageLink } from "../../services/getManageCustomerSubscriptionCardPageLink.service.js";
 import { changeCustomerSubscriptionPlan } from "../../services/changeCustomerSubscriptionPlan.service.js";
+import { logoutService } from "../../services/logout.service.js";
 
 const protectedRouter = Router();
 
 protectedRouter.use(authMiddleware);
+
+protectedRouter.delete("/logout", logoutService);
 
 protectedRouter.patch("/onboarding", saveOnboardingStep);
 protectedRouter.delete("/onboarding/skip", deleteUserOnboardingState);
