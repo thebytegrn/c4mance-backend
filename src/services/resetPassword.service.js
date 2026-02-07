@@ -1,5 +1,6 @@
 import { signUpValidator } from "../constants/validators.constants.js";
 import { User } from "../models/user.model.js";
+import { deleteAuthSession } from "../utils/deleteAuthSession.util.js";
 
 const resetPasswordValidator = signUpValidator.pick({ password: true });
 
@@ -28,9 +29,7 @@ export const resetPasswordService = async (req, res) => {
     user.password = password;
     await user.save();
 
-    res.clearCookie("c4mance-refreshToken");
-    res.clearCookie("connect.sid");
-    req.session.destroy();
+    await deleteAuthSession(req, res, user._id);
 
     return res
       .status(200)

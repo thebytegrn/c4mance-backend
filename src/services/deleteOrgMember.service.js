@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import { deleteAuthSession } from "../utils/deleteAuthSession.util.js";
 
 export const deleteOrgMember = async (req, res) => {
   try {
@@ -30,6 +31,8 @@ export const deleteOrgMember = async (req, res) => {
     }
 
     await User.findByIdAndUpdate(memberId, { isDeleted: true }).exec();
+
+    await deleteAuthSession(req, res, memberId);
     res
       .status(204)
       .json({ success: true, message: "Employee account deleted" });

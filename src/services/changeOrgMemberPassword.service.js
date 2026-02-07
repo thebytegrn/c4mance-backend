@@ -1,6 +1,7 @@
 import { changeOrgMemberPasswordValidator } from "../constants/validators.constants.js";
 import bcrypt from "bcryptjs";
 import { User } from "../models/user.model.js";
+import { deleteAuthSession } from "../utils/deleteAuthSession.util.js";
 
 export const changeOrgMemberPassword = async (req, res) => {
   try {
@@ -18,12 +19,10 @@ export const changeOrgMemberPassword = async (req, res) => {
     }
 
     if (currentPassword === newPassword) {
-      return res
-        .status(403)
-        .json({
-          success: false,
-          message: "New password cannot be the same as current password",
-        });
+      return res.status(403).json({
+        success: false,
+        message: "New password cannot be the same as current password",
+      });
     }
 
     const isCorrectPassword = await bcrypt.compare(
@@ -40,7 +39,7 @@ export const changeOrgMemberPassword = async (req, res) => {
     existingUser.password = newPassword;
     await existingUser.save();
 
-    res.clearCookie("refreshToken");
+    await deleteAuthSession(req, res, user._id);
     return res
       .status(200)
       .json({ success: true, message: "Password changed, re-login" });

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { User } from "../models/user.model.js";
 import { Disabled } from "../models/disabled.model.js";
+import { deleteAuthSession } from "../utils/deleteAuthSession.util.js";
 
 export const disableOrgMember = async (req, res) => {
   try {
@@ -23,6 +24,8 @@ export const disableOrgMember = async (req, res) => {
 
     await Disabled.create({ entityId: memberId, entity: "Employee", reason });
     await User.findByIdAndUpdate(memberId, { isDisabled: true }).exec();
+
+    await deleteAuthSession(req, res, memberId);
 
     return res
       .status(200)
