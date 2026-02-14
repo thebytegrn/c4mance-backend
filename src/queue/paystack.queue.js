@@ -56,15 +56,15 @@ export const paystackEventWorker = new Worker(
       if (body.event === "subscription.create") {
         const eventData = body.data;
 
-        const createdSub = await Subscription.findOne({
+        const subCreated = await Subscription.findOne({
           customerCode: eventData.customer.customer_code,
         }).exec();
 
-        if (createdSub) {
-          createdSub.subscriptionCode = eventData.subscription_code;
-          createdSub.plan = eventData.plan.plan_code;
-          createdSub.status = eventData.status;
-          await createdSub.save();
+        if (subCreated) {
+          subCreated.subscriptionCode = eventData.subscription_code;
+          subCreated.plan = eventData.plan.plan_code;
+          subCreated.status = eventData.status;
+          await subCreated.save();
         } else {
           const newSub = new Subscription({
             subscriptionCode: eventData.subscription_code,
