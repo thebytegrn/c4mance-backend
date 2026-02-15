@@ -9,7 +9,7 @@ const SubscriptionSchema = new mongoose.Schema(
     customerCode: { type: String, index: true },
     subscriptionCode: { type: String, index: true },
     status: { type: String, default: false },
-    plan: { type: String, required: true },
+    plan: String,
   },
   { timestamps: true },
 );

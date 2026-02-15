@@ -2,12 +2,14 @@ import mongoose from "mongoose";
 
 export const InvoiceSchema = new mongoose.Schema(
   {
-    invoiceCode: { type: String, required: true },
-    issueDate: { type: Date, required: true },
-    dueDate: Date,
-    amountDue: { type: Number, required: true },
+    invoiceCode: String,
+    dueAt: { type: Date, default: Date.now() + 3600 * 24 * 3 * 1000 },
+    issuedAt: { type: Date, default: Date.now() },
+    amount: String,
     status: String,
-    customer: { type: mongoose.Schema.Types.ObjectId, required: true },
+    customer: String,
   },
   { timestamps: true },
 );
+
+export const Invoice = mongoose.model("Invoice", InvoiceSchema);

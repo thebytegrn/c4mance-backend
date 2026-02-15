@@ -2,6 +2,7 @@ import { Queue, Worker } from "bullmq";
 import { redisConnectionOption } from "../database/redis.database.js";
 import { Transaction } from "../models/transaction.model.js";
 import { Subscription } from "../models/subscription.model.js";
+import { Invoice } from "../models/invoice.model.js";
 
 export const paystackEventQueue = new Queue("paystackEvents", {
   defaultJobOptions: { removeOnComplete: true, removeOnFail: 100, attempts: 3 },
@@ -14,9 +15,9 @@ export const paystackEventWorker = new Worker(
     try {
       const body = job.data;
 
-      if (body.event === "charge.success") {
-        const eventData = body.data;
+      const eventData = body.data;
 
+      if (body.event === "charge.success") {
         const isAlreadyProcessedTransaction = await Transaction.findOne({
           reference: eventData.reference,
         }).exec();
@@ -44,6 +45,23 @@ export const paystackEventWorker = new Worker(
           }
         }
 
+        const invoice = await Invoice.findOne({
+          customer: eventData.customer.customer_code,
+        }).exec();
+
+        if (invoice) {
+          invoice.status = "paid";
+          await invoice.save();
+        } else {
+          await Invoice.create({
+            invoiceCode: eventData.invoice_code,
+            dueAt: Date.now(),
+            customer: eventData.customer.customer_code,
+            amount: eventData.amount / 100,
+            status: "paid",
+          });
+        }
+
         await Transaction.create({
           amount: eventData.amount / 100,
           reference: eventData.reference,
@@ -53,9 +71,24 @@ export const paystackEventWorker = new Worker(
         });
       }
 
-      if (body.event === "subscription.create") {
-        const eventData = body.data;
+      if (body.event === "invoice.create") {
+        const invoice = await Invoice.findOne({
+          customer: eventData.customer.customer_code,
+        })
+          .lean()
+          .exec();
 
+        if (!invoice) {
+          await Invoice.create({
+            invoiceCode: eventData.invoice_code,
+            customer: eventData.customer.customer_code,
+            amount: eventData.amount / 100,
+            status: "pending",
+          });
+        }
+      }
+
+      if (body.event === "subscription.create") {
         const subCreated = await Subscription.findOne({
           customerCode: eventData.customer.customer_code,
         }).exec();
